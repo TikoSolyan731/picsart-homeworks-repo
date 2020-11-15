@@ -13,6 +13,35 @@ public class Plane {
     private int seats;
     private double cost;
 
+    public Plane() {
+        model = "Something";
+        country = "Germany";
+        year = 2012;
+        hours = 0;
+        isMilitary = false;
+        engineType = "Some Engine";
+        weight = 20000;
+        wingspan = 30;
+        topSpeed = 200;
+        seats = 10;
+        cost = 100000.0;
+    }
+
+    public Plane(String model, String country, int year, int hours, boolean isMilitary, String engineType,
+                 int weight, int wingspan, int topSpeed, int seats, double cost) {
+        setModel(model);
+        setCountry(country);
+        setYear(year);
+        setHours(hours);
+        setMilitary(isMilitary);
+        setEngineType(engineType);
+        setWeight(weight);
+        setWingspan(wingspan);
+        setTopSpeed(topSpeed);
+        setSeats(seats);
+        setCost(cost);
+    }
+
     public String getModel() {
         return model;
     }

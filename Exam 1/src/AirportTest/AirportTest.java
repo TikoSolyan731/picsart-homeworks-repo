@@ -9,7 +9,6 @@ public class AirportTest {
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
 
-
         System.out.println("First Plane\n");
         Plane pl1 = new Plane();
         System.out.print("Model: ");

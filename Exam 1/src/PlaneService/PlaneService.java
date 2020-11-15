@@ -151,11 +151,6 @@ public class PlaneService {
             }
         }
 
-        for (Plane p : temp) {
-            if (!p.isMilitary()) {
-                printPlane(p);
-                System.out.println("-----");
-            }
-        }
+        printNotMilPlanes(temp);
     }
 }
