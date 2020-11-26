@@ -13,6 +13,7 @@ public class Project {
     public static void main(String[] args) {
         // Part 1. The main classes and functionality.
         // In the future implementations for airplanes and airports can be created.
+        // Windows.
 
         CargoDock d1 = new CargoDock("Barcelona", 5, 4500);
         CargoDock d2 = new CargoDock("Madrid", 6, 6000);
