@@ -7,10 +7,12 @@ import transport.waterTransport.CargoShip;
 import transport.waterTransport.Cruiser;
 import transport.waterTransport.Ship;
 
+import java.util.Scanner;
+
 public class Project {
     public static void main(String[] args) {
         // Part 1. The main classes and functionality.
-        // In the future I will create implementations for airplanes and airports.
+        // In the future implementations for airplanes and airports can be created.
 
         CargoDock d1 = new CargoDock("Barcelona", 5, 4500);
         CargoDock d2 = new CargoDock("Madrid", 6, 6000);
@@ -107,7 +109,70 @@ public class Project {
 
         // Part 3. Writing to file.
 
-        CargoShipService.writeToFile(sh1);
-        CargoShipService.writeToFile(sh2);
+        String path = "cargo.txt";
+
+        //CargoShipService.writeToFile(sh1, path);
+        //CargoShipService.writeToFile(sh2, path);
+
+        // Part 4. Menu Implementation.
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose a Category:\n1.Transport\n2.Reception\nPress anything else to quit.");
+
+        switch (scanner.nextInt()) {
+            case 1:
+                boolean isMenuActive = true;
+
+                while (isMenuActive) {
+                    System.out.println("Choose Transport:\n1.Cargo Ship\n2.Cruiser\n3.Quit");
+                    int item = scanner.nextInt();
+
+                    switch (item) {
+                        case 1:
+                            boolean isMethodsMenuActive = true;
+
+                            while (isMethodsMenuActive) {
+                                System.out.println("Choose a function:\n1.printCargoShip\n2.printNameBiggestMaxCargo\n" +
+                                        "3.printLowestCargo\n4.writeToFile\n5.Quit");
+                                int funcNum = scanner.nextInt();
+
+                                switch (funcNum) {
+                                    case 1:
+                                        CargoShipService.printCargoShip(sh1);
+                                        break;
+                                    case 2:
+                                        CargoShipService.printNameBiggestMaxCargo(cargos);
+                                        break;
+                                    case 3:
+                                        CargoShipService.printLowestCargo(cargos);
+                                        break;
+                                    case 4:
+                                        CargoShipService.writeToFile(sh1, path);
+                                        break;
+                                    case 5:
+                                        System.out.println("Quiting.");
+                                        isMethodsMenuActive = false;
+                                        break;
+                                }
+                            }
+                            break;
+                        case 2:
+                            //methods for cruiser.
+                            break;
+                        case 3:
+                            System.out.println("Quiting.");
+                            isMenuActive = false;
+                            break;
+                        default:
+                            System.out.println("Wrong command.");
+                            break;
+                    }
+                }
+                break;
+            case 2:
+                // Reception models.
+                break;
+            default:
+                System.out.println("Menu Quited.");
+        }
     }
 }

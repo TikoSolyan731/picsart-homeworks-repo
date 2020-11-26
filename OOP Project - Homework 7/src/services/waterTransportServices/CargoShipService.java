@@ -9,7 +9,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.Formatter;
 
 public class CargoShipService {
-    public static String path = "cargo.txt";
     private static final String FILE_FORMAT = "%s,%s,%s,%d,%.1f,%.1f,%.1f\n";
 
     public static void printCargoShip(CargoShip ship) {
@@ -40,7 +39,7 @@ public class CargoShipService {
         printCargoShip(min);
     }
 
-    public static void writeToFile(CargoShip ship) {
+    public static void writeToFile(CargoShip ship, String path) {
         Formatter f = new Formatter();
         String info = f.format(FILE_FORMAT, ship.getName(), ship.getCurrentPos().getName(),
                 ship.getCaptain(), ship.getCrewMembersCount(), ship.getMaxSpeed(), ship.getCargoWeight(), ship.getMaxCargoWeight()).toString();
