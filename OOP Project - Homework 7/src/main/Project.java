@@ -2,7 +2,10 @@ package main;
 
 import reception.waterReception.CargoDock;
 import reception.waterReception.TouristDock;
+import services.waterReceptionServices.CargoDockService;
+import services.waterReceptionServices.TouristDockService;
 import services.waterTransportServices.CargoShipService;
+import services.waterTransportServices.CruiserService;
 import transport.waterTransport.CargoShip;
 import transport.waterTransport.Cruiser;
 import transport.waterTransport.Ship;
@@ -13,7 +16,6 @@ public class Project {
     public static void main(String[] args) {
         // Part 1. The main classes and functionality.
         // In the future implementations for airplanes and airports can be created.
-        // Windows.
 
         CargoDock d1 = new CargoDock("Barcelona", 5, 4500);
         CargoDock d2 = new CargoDock("Madrid", 6, 6000);
@@ -23,8 +25,14 @@ public class Project {
         CargoShip sh1 = new CargoShip(d1, "bla bla1");
         CargoShip sh2 = new CargoShip(d2, "bla bla2");
         Cruiser sh3 = new Cruiser(d2, "Santa Maria");
+        Cruiser sh4 = new Cruiser(d1, "Santa Luchia");
+        Cruiser sh5 = new Cruiser(d2, "Santa Barbara");
 
         CargoShip[] cargos = {sh1, sh2};
+        Cruiser[] cruisers = {sh3, sh4, sh5};
+
+        CargoDock[] cargoDocks = {d1, d2};
+        TouristDock[] touristDocks = {d3, d4};
 
         System.out.println(sh1.getCurrentPos().getName());
         System.out.println(sh2.getCurrentPos().getName());
@@ -157,7 +165,32 @@ public class Project {
                             }
                             break;
                         case 2:
-                            //methods for cruiser.
+                            isMethodsMenuActive = true;
+
+                            while (isMethodsMenuActive) {
+                                System.out.println("Choose a function:\n1.printCruiser\n2.printTicketCostAscending\n" +
+                                        "3.printLeastPassengerCount\n4.writeToFile\n5.Quit");
+                                int funcNum = scanner.nextInt();
+
+                                switch (funcNum) {
+                                    case 1:
+                                        CruiserService.printCruiser(sh3);
+                                        break;
+                                    case 2:
+                                        CruiserService.printTicketCostAscending(cruisers);
+                                        break;
+                                    case 3:
+                                        CruiserService.printLeastPassengerCount(cruisers);
+                                        break;
+                                    case 4:
+                                        CruiserService.writeToFile(sh5, path);
+                                        break;
+                                    case 5:
+                                        System.out.println("Quiting.");
+                                        isMethodsMenuActive = false;
+                                        break;
+                                }
+                            }
                             break;
                         case 3:
                             System.out.println("Quiting.");
@@ -170,7 +203,78 @@ public class Project {
                 }
                 break;
             case 2:
-                // Reception models.
+                isMenuActive = true;
+
+                while (isMenuActive) {
+                    System.out.println("Choose Reception:\n1.Cargo Dock\n2.Tourist Dock\n3.Quit");
+                    int item = scanner.nextInt();
+
+                    switch (item) {
+                        case 1:
+                            boolean isMethodsMenuActive = true;
+
+                            while (isMethodsMenuActive) {
+                                System.out.println("Choose a function:\n1.printCargoDock\n2.printBiggestCargoWeight\n" +
+                                        "3.printDockedCargoShipBiggestMaxWeight\n4.writeToFile\n5.Quit");
+                                int funcNum = scanner.nextInt();
+
+                                switch (funcNum) {
+                                    case 1:
+                                        CargoDockService.printCargoDock(d1);
+                                        break;
+                                    case 2:
+                                        CargoDockService.printBiggestCargoWeight(cargoDocks);
+                                        break;
+                                    case 3:
+                                        CargoDockService.printDockedCargoShipBiggestMaxWeight(d2);
+                                        break;
+                                    case 4:
+                                        CargoDockService.writeToFile(d1, path);
+                                        break;
+                                    case 5:
+                                        System.out.println("Quiting.");
+                                        isMethodsMenuActive = false;
+                                        break;
+                                }
+                            }
+                            break;
+                        case 2:
+                            isMethodsMenuActive = true;
+
+                            while (isMethodsMenuActive) {
+                                System.out.println("Choose a function:\n1.printTouristDock\n2.printNameLeastPeopleCount\n" +
+                                        "3.printByMaxPeopleCountAscending\n4.writeToFile\n5.Quit");
+                                int funcNum = scanner.nextInt();
+
+                                switch (funcNum) {
+                                    case 1:
+                                        TouristDockService.printTouristDock(d3);
+                                        break;
+                                    case 2:
+                                        TouristDockService.printNameLeastPeopleCount(touristDocks);
+                                        break;
+                                    case 3:
+                                        TouristDockService.printByMaxPeopleCountAscending(touristDocks);
+                                        break;
+                                    case 4:
+                                        TouristDockService.writeToFile(d3, path);
+                                        break;
+                                    case 5:
+                                        System.out.println("Quiting.");
+                                        isMethodsMenuActive = false;
+                                        break;
+                                }
+                            }
+                            break;
+                        case 3:
+                            System.out.println("Quiting.");
+                            isMenuActive = false;
+                            break;
+                        default:
+                            System.out.println("Wrong command.");
+                            break;
+                    }
+                }
                 break;
             default:
                 System.out.println("Menu Quited.");
