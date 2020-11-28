@@ -12,7 +12,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Formatter;
 
 public class CargoDockService {
-    private static final String FILE_FORMAT = "%s,%d,%d,%.1f";
+    private static final String FILE_FORMAT = "%s,%d,%d,%.1f\n";
     private static final Formatter FORMATTER = new Formatter();
 
     public static void printCargoDock(CargoDock dock) {

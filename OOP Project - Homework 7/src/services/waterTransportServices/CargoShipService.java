@@ -12,7 +12,6 @@ public class CargoShipService {
     private static final String FILE_FORMAT = "%s,%s,%s,%d,%.1f,%.1f,%.1f\n";
     private static final Formatter FORMATTER = new Formatter();
 
-
     public static void printCargoShip(CargoShip ship) {
         System.out.printf("Name: %s, Current Pos: %s, Max Speed: %.1f,\n" +
                         "Cargo: %.1f, Max Cargo: %.1f\n", ship.getName(), ship.getCurrentPos().getName(),

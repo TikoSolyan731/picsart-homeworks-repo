@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Formatter;
 
 public class TouristDockService {
-    private static final String FILE_FORMAT = "%s,%d,%d,%d,%d";
+    private static final String FILE_FORMAT = "%s,%d,%d,%d,%d\n";
     private static final Formatter FORMATTER = new Formatter();
 
     public static void printTouristDock(TouristDock dock) {
