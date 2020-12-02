@@ -1,5 +1,9 @@
 package services.waterTransportServices;
 
+import reception.waterReception.CargoDock;
+import reception.waterReception.TouristDock;
+import services.waterReceptionServices.CargoDockService;
+import services.waterReceptionServices.TouristDockService;
 import transport.waterTransport.CargoShip;
 import transport.waterTransport.Cruiser;
 
@@ -9,6 +13,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Formatter;
+import java.util.Scanner;
 
 public class CruiserService {
     private static final String FILE_FORMAT = "%s,%s,%s,%d,%.1f,%d,%d,%.1f\n";
@@ -18,6 +23,37 @@ public class CruiserService {
         System.out.printf("Name: %s, Current Pos: %s, Max Speed: %.1f,\n" +
                         "Passenger Count: %d, Max Passenger Count: %d, Ticket Cost: %.1f\n", ship.getName(), ship.getCurrentPos().getName(),
                 ship.getMaxSpeed(), ship.getPassengerCount(), ship.getMaxPassengerCount(), ship.getTicketCost());
+    }
+
+    public static Cruiser createCruiser(boolean createNewDock, TouristDock touristDock) {
+        Scanner sc = new Scanner(System.in);
+
+        TouristDock td;
+
+        if (createNewDock) {
+            System.out.println("Create a tourist dock first.");
+            td = TouristDockService.createTouristDock();
+        } else
+            td = touristDock;
+
+        System.out.print("Ship Name: ");
+        String name = sc.nextLine();
+
+        Cruiser cs = new Cruiser(td, name);
+        System.out.print("Captain: ");
+        cs.setCaptain(sc.nextLine());
+        System.out.print("Max Speed: ");
+        cs.setMaxSpeed(sc.nextDouble());
+        System.out.print("Crew Member Count: ");
+        cs.setCrewMembersCount(sc.nextInt());
+        System.out.print("Passenger Count: ");
+        cs.setPassengerCount(sc.nextInt());
+        System.out.print("Max Passenger Count: ");
+        cs.setMaxPassengerCount(sc.nextInt());
+        System.out.print("Ticket Cost: ");
+        cs.setTicketCost(sc.nextDouble());
+        System.out.println("Done!");
+        return cs;
     }
 
     public static void printTicketCostAscending(Cruiser[] ships) {

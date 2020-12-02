@@ -11,7 +11,7 @@ public abstract class Ship implements Transport {
     private double maxSpeed = 55;
     private int crewMembersCount = 25;
 
-    public Ship(CargoDock currentPos, String name) {
+    public Ship(Dock currentPos, String name) {
         this.currentPos = currentPos;
         this.currentPos.dockShip(this);
         this.name = name;

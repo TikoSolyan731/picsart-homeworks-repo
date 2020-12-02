@@ -11,11 +11,11 @@ public class Cruiser extends Ship implements TouristTransport {
     private int maxPassengerCount = 500;
     private double ticketCost = 5500;
 
-    public Cruiser(CargoDock currentPos, String name) {
+    public Cruiser(TouristDock currentPos, String name) {
         super(currentPos, name);
     }
 
-    public Cruiser(CargoDock currentPos, String name, int maxPassengerCount, double ticketCost) {
+    public Cruiser(TouristDock currentPos, String name, int maxPassengerCount, double ticketCost) {
         super(currentPos, name);
         this.maxPassengerCount = maxPassengerCount;
         this.ticketCost = ticketCost;

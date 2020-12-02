@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Formatter;
+import java.util.Scanner;
 
 public class TouristDockService {
     private static final String FILE_FORMAT = "%s,%d,%d,%d,%d\n";
@@ -23,6 +24,25 @@ public class TouristDockService {
             if (ship != null)
                 System.out.printf("\t--%s\n", ship.getName());
         }
+    }
+
+    public static TouristDock createTouristDock() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Dock Name: ");
+        String name = sc.nextLine();
+        System.out.print("Max Docked Ships: ");
+        int count = sc.nextInt();
+        TouristDock td = new TouristDock(name, count);
+
+        System.out.print("Current People Count: ");
+        td.setCurrentPeopleCount(sc.nextInt());
+
+        System.out.print("Max People Count: ");
+        td.setMaxPeopleCount(sc.nextInt());
+        System.out.println("Done!");
+
+        return td;
     }
 
     public static void printNameLeastPeopleCount(TouristDock[] docks) {

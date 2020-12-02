@@ -41,7 +41,7 @@ public abstract class Dock implements Reception {
         return maxDockedShips;
     }
 
-    public void setMaxDockedShips(int maxDockedShips) {
+    protected void setMaxDockedShips(int maxDockedShips) {
         this.maxDockedShips = maxDockedShips;
     }
 
@@ -49,7 +49,7 @@ public abstract class Dock implements Reception {
         return dockedShipsCount;
     }
 
-    public void setDockedShipsCount(int dockedShipsCount) {
+    protected void setDockedShipsCount(int dockedShipsCount) {
         this.dockedShipsCount = dockedShipsCount;
     }
 

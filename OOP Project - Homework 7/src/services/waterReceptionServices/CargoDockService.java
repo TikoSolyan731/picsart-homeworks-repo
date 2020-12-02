@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Formatter;
+import java.util.Scanner;
 
 public class CargoDockService {
     private static final String FILE_FORMAT = "%s,%d,%d,%.1f\n";
@@ -23,6 +24,22 @@ public class CargoDockService {
             if (ship != null)
                 System.out.printf("\t--%s\n", ship.getName());
         }
+    }
+
+    public static CargoDock createCargoDock() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Dock Name: ");
+        String name = sc.nextLine();
+        System.out.print("Max Docked Ships: ");
+        int count = sc.nextInt();
+        CargoDock cd = new CargoDock(name, count);
+
+        System.out.print("Current Cargo Weight: ");
+        cd.setCurrentCargoWeight(sc.nextDouble());
+        System.out.println("Done!");
+
+        return cd;
     }
 
     public static void printBiggestCargoWeight(CargoDock[] docks) {
