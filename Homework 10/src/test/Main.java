@@ -32,7 +32,7 @@ public class Main {
 //        System.out.println(stack.pop());
 //        System.out.println(stack);
 
-        String str = "{[([][]{[}])]}";
+        String str = "{{{{[][][]()([}}}}";
         System.out.println(isBalanced(str));
     }
 
@@ -64,6 +64,6 @@ public class Main {
                     return false;
             }
         }
-        return true;
+        return parentheses.isEmpty();
     }
 }
