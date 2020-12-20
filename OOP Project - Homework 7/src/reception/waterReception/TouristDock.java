@@ -1,5 +1,6 @@
 package reception.waterReception;
 
+import reception.Map;
 import reception.TouristReception;
 import transport.TouristTransport;
 import transport.waterTransport.Cruiser;
@@ -9,12 +10,12 @@ public class TouristDock extends Dock implements TouristReception {
     private int currentPeopleCount = 0;
     private int maxPeopleCount = 2000;
 
-    public TouristDock(String name, int maxDockedShips) {
-        super(name, maxDockedShips);
+    public TouristDock(Map placement, int maxDockedShips) {
+        super(placement, maxDockedShips);
     }
 
-    public TouristDock(String name, int maxDockedShips, int currentPeopleCount, int maxPeopleCount) {
-        super(name, maxDockedShips);
+    public TouristDock(Map placement, int maxDockedShips, int currentPeopleCount, int maxPeopleCount) {
+        super(placement, maxDockedShips);
         this.currentPeopleCount = currentPeopleCount;
         this.maxPeopleCount = maxPeopleCount;
     }
@@ -24,7 +25,7 @@ public class TouristDock extends Dock implements TouristReception {
         Cruiser cruiser = (Cruiser) touristTransport;
         TouristDock tempFrom = (TouristDock) from;
 
-        System.out.println("Receiving " + peopleCount + " tourists from " + tempFrom.getName() + " by the cruiser " +
+        System.out.println("Receiving " + peopleCount + " tourists from " + tempFrom.getPlacement() + " by the cruiser " +
                 cruiser.getName() + ".");
         currentPeopleCount += peopleCount;
         cruiser.setPassengerCount(cruiser.getPassengerCount() - peopleCount);
@@ -40,7 +41,7 @@ public class TouristDock extends Dock implements TouristReception {
             return;
         }
 
-        System.out.println("Sending " + peopleCount + " tourists to " + tempTo.getName() + " by the cruiser " +
+        System.out.println("Sending " + peopleCount + " tourists to " + tempTo.getPlacement() + " by the cruiser " +
                 cruiser.getName() + ".");
         currentPeopleCount -= peopleCount;
         cruiser.setPassengerCount(cruiser.getPassengerCount() + peopleCount);
@@ -71,13 +72,13 @@ public class TouristDock extends Dock implements TouristReception {
             }
         }
 
-        System.out.println("There is no cargoShip " + ship.getName() + " at the dock of " + getName());
+        System.out.println("There is no cargoShip " + ship.getName() + " at the dock of " + getPlacement());
     }
 
     @Override
     public void upgrade() {
         super.upgrade();
-        System.out.println("Upgraded the Tourist Dock " + getName() + ".");
+        System.out.println("Upgraded the Tourist Dock " + getPlacement() + ".");
     }
 
     public int getCurrentPeopleCount() {
@@ -94,5 +95,11 @@ public class TouristDock extends Dock implements TouristReception {
 
     public void setMaxPeopleCount(int maxPeopleCount) {
         this.maxPeopleCount = maxPeopleCount;
+    }
+
+    @Override
+    public String toString() {
+        return "Tourist Dock:" +
+                "Current People Count = " + currentPeopleCount;
     }
 }

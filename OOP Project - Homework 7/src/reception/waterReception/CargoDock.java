@@ -1,22 +1,20 @@
 package reception.waterReception;
 
 import reception.CargoReception;
-import reception.Reception;
+import reception.Map;
 import transport.CargoTransport;
 import transport.waterTransport.CargoShip;
 import transport.waterTransport.Ship;
 
-import java.util.Arrays;
-
 public class CargoDock extends Dock implements CargoReception {
     private double currentCargoWeight = 0;
 
-    public CargoDock(String name, int maxDockedShips) {
-        super(name, maxDockedShips);
+    public CargoDock(Map placement, int maxDockedShips) {
+        super(placement, maxDockedShips);
     }
 
-    public CargoDock(String name, int maxDockedShips, double currentCargoWeight) {
-        super(name, maxDockedShips);
+    public CargoDock(Map placement, int maxDockedShips, double currentCargoWeight) {
+        super(placement, maxDockedShips);
         this.currentCargoWeight = currentCargoWeight;
     }
 
@@ -46,7 +44,7 @@ public class CargoDock extends Dock implements CargoReception {
             }
         }
 
-        System.out.println("There is no cargoShip " + ship.getName() + " at the dock of " + getName());
+        System.out.println("There is no cargoShip " + ship.getName() + " at the dock of " + getPlacement());
     }
 
     @Override
@@ -54,7 +52,7 @@ public class CargoDock extends Dock implements CargoReception {
         CargoShip cargoShip = (CargoShip) cargoTransport;
         CargoDock tempFrom = (CargoDock) from;
 
-        System.out.println("Receiving Cargo of weight " + weight + " from " + tempFrom.getName() + " by the cargoShip " +
+        System.out.println("Receiving Cargo of weight " + weight + " from " + tempFrom.getPlacement() + " by the cargoShip " +
                 cargoShip.getName() + ".");
         currentCargoWeight += weight;
         cargoShip.setCargoWeight(cargoShip.getCargoWeight() - weight);
@@ -70,7 +68,7 @@ public class CargoDock extends Dock implements CargoReception {
             return;
         }
 
-        System.out.println("Sending Cargo of weight " + weight + " to " + tempTo.getName() + " by the cargoShip " +
+        System.out.println("Sending Cargo of weight " + weight + " to " + tempTo.getPlacement() + " by the cargoShip " +
             cargoShip.getName() + ".");
         currentCargoWeight -= weight;
         cargoShip.setCargoWeight(cargoShip.getCargoWeight() + weight);
@@ -79,7 +77,7 @@ public class CargoDock extends Dock implements CargoReception {
     @Override
     public void upgrade() {
         super.upgrade();
-        System.out.println("Upgraded the Cargo Dock " + getName() + ".");
+        System.out.println("Upgraded the Cargo Dock " + getPlacement() + ".");
     }
 
     public double getCurrentCargoWeight() {
@@ -88,5 +86,11 @@ public class CargoDock extends Dock implements CargoReception {
 
     public void setCurrentCargoWeight(double currentCargoWeight) {
         this.currentCargoWeight = currentCargoWeight;
+    }
+
+    @Override
+    public String toString() {
+        return "Cargo Dock:" +
+                "Current Cargo Weight = " + currentCargoWeight;
     }
 }

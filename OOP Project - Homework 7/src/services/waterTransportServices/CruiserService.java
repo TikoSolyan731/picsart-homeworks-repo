@@ -1,11 +1,9 @@
 package services.waterTransportServices;
 
-import reception.waterReception.CargoDock;
+import reception.Map;
 import reception.waterReception.TouristDock;
-import services.waterReceptionServices.CargoDockService;
-import services.waterReceptionServices.TouristDockService;
-import transport.waterTransport.CargoShip;
 import transport.waterTransport.Cruiser;
+import utils.Utils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,21 +19,37 @@ public class CruiserService {
 
     public static void printCruiser(Cruiser ship) {
         System.out.printf("Name: %s, Current Pos: %s, Max Speed: %.1f,\n" +
-                        "Passenger Count: %d, Max Passenger Count: %d, Ticket Cost: %.1f\n", ship.getName(), ship.getCurrentPos().getName(),
+                        "Passenger Count: %d, Max Passenger Count: %d, Ticket Cost: %.1f\n", ship.getName(), ship.getCurrentPos().getPlacement(),
                 ship.getMaxSpeed(), ship.getPassengerCount(), ship.getMaxPassengerCount(), ship.getTicketCost());
     }
 
-    public static Cruiser createCruiser(boolean createNewDock, TouristDock touristDock) {
+    public static Cruiser createCruiser() {
         Scanner sc = new Scanner(System.in);
+        StringBuilder sb = new StringBuilder();
 
-        TouristDock td;
+        System.out.println("Choose the place to create the ship at: ");
+        Map[] places = Map.values();
+        int i = 1;
+        for (Map place : places) {
+            sb.append(i++).append(".").append(place).append(" - has ").append(place.getReceptions()).append('\n');
+        }
+        int p;
+        while (true) {
+            System.out.println(sb.toString());
+            p = sc.nextInt();
+            if (!Utils.checkInput(p, places.length)) {
+                System.out.println("Enter valid number.");
+                continue;
+            }
+            if (!(places[p - 1].getReceptions().get(1) instanceof TouristDock)) {
+                System.out.println("There are no Tourist Docks at " + places[p - 1]);
+                System.out.println("Choose another place: ");
+            } else
+                break;
+        }
+        TouristDock td = (TouristDock) places[p - 1].getReceptions().get(1);
 
-        if (createNewDock) {
-            System.out.println("Create a tourist dock first.");
-            td = TouristDockService.createTouristDock();
-        } else
-            td = touristDock;
-
+        sc.nextLine();
         System.out.print("Ship Name: ");
         String name = sc.nextLine();
 
@@ -94,7 +108,7 @@ public class CruiserService {
     }
 
     public static void writeToFile(Cruiser ship, String path) {
-        String info = FORMATTER.format(FILE_FORMAT, ship.getName(), ship.getCurrentPos().getName(),
+        String info = FORMATTER.format(FILE_FORMAT, ship.getName(), ship.getCurrentPos().getPlacement(),
                 ship.getCaptain(), ship.getCrewMembersCount(), ship.getMaxSpeed(),
                 ship.getPassengerCount(), ship.getMaxPassengerCount(),
                 ship.getTicketCost()).toString();

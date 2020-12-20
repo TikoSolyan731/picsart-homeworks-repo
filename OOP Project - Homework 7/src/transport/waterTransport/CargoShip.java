@@ -2,7 +2,6 @@ package transport.waterTransport;
 
 import reception.CargoReception;
 import reception.waterReception.CargoDock;
-import reception.waterReception.Dock;
 import transport.CargoTransport;
 
 public class CargoShip extends Ship implements CargoTransport {
@@ -20,17 +19,6 @@ public class CargoShip extends Ship implements CargoTransport {
     }
 
     @Override
-    public void move(Dock from, Dock to) {
-        if (getCurrentPos() == from) {
-            System.out.println("Moving The Cargo Ship " + getName() + " From " + from.getName() + " to " + to.getName());
-            getCurrentPos().undockShip(this);
-            setCurrentPos(to);
-            getCurrentPos().dockShip(this);
-        } else
-            System.out.println("You cannot move the ship from a place other than the current position.");
-    }
-
-    @Override
     public void transport(double weight, CargoReception from, CargoReception to) {
         if (from instanceof CargoDock && to instanceof CargoDock) {
             CargoDock tempFrom = (CargoDock) from;
@@ -42,9 +30,9 @@ public class CargoShip extends Ship implements CargoTransport {
                 return;
             }
 
-            System.out.println("Transporting " + weight + " cargo from " + tempFrom.getName() + " to " + tempTo.getName());
+            System.out.println("Transporting " + weight + " cargo from " + tempFrom.getPlacement() + " to " + tempTo.getPlacement());
             tempFrom.sendCargo(weight, this, to);
-            this.move(tempFrom, tempTo);
+            this.moveTo(tempTo);
             tempTo.acceptCargo(weight, this, from);
         } else
             System.out.println("Transportation allowed only from Cargo Dock to other Cargo Dock.");

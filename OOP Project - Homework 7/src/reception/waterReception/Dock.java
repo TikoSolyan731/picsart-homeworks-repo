@@ -1,48 +1,38 @@
 package reception.waterReception;
 
+import reception.AbstractReception;
+import reception.Map;
 import reception.Reception;
 import transport.waterTransport.Ship;
 
 import java.util.Arrays;
 
-public abstract class Dock implements Reception {
-    private String name = "";
-    private int maxDockedShips = 4;
+public abstract class Dock extends AbstractReception {
+    private int maxDockedShips;
     private int dockedShipsCount = 0;
-    private Ship[] dockedShips = new Ship[maxDockedShips];
+    private Ship[] dockedShips;
 
-    public Dock(String name, int maxDockedShips) {
-        this.name = name;
+    public Dock(Map placement, int maxDockedShips) {
+        super(placement);
         this.maxDockedShips = maxDockedShips;
+        dockedShips = new Ship[maxDockedShips];
     }
 
     @Override
     public void upgrade() {
-        int newMax = getMaxDockedShips() + 5;
-        Ship[] temp = Arrays.copyOf(getDockedShips(), newMax);
+        int newMax = maxDockedShips + 5;
+        Ship[] temp = Arrays.copyOf(dockedShips, newMax);
 
-        setMaxDockedShips(newMax);
-        setDockedShips(temp);
+        maxDockedShips = newMax;
+        dockedShips = temp;
     }
 
     public abstract void dockShip(Ship ship);
 
     public abstract void undockShip(Ship ship);
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getMaxDockedShips() {
         return maxDockedShips;
-    }
-
-    protected void setMaxDockedShips(int maxDockedShips) {
-        this.maxDockedShips = maxDockedShips;
     }
 
     public int getDockedShipsCount() {
@@ -55,9 +45,5 @@ public abstract class Dock implements Reception {
 
     public Ship[] getDockedShips() {
         return dockedShips;
-    }
-
-    public void setDockedShips(Ship[] dockedShips) {
-        this.dockedShips = dockedShips;
     }
 }

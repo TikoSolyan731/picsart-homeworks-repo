@@ -1,8 +1,6 @@
 package transport.waterTransport;
 
 import reception.TouristReception;
-import reception.waterReception.CargoDock;
-import reception.waterReception.Dock;
 import reception.waterReception.TouristDock;
 import transport.TouristTransport;
 
@@ -33,23 +31,12 @@ public class Cruiser extends Ship implements TouristTransport {
                 return;
             }
 
-            System.out.println("Transporting " + peopleCount + " tourists from " + tempFrom.getName() + " to " + tempTo.getName());
+            System.out.println("Transporting " + peopleCount + " tourists from " + tempFrom.getPlacement() + " to " + tempTo.getPlacement());
             tempFrom.sendPeople(peopleCount, this, to);
-            this.move(tempFrom, tempTo);
+            this.moveTo(tempTo);
             tempTo.acceptPeople(peopleCount, this, from);
         } else
             System.out.println("Transportation allowed only from Cargo Dock to other Cargo Dock.");
-    }
-
-    @Override
-    public void move(Dock from, Dock to) {
-        if (getCurrentPos() == from) {
-            System.out.println("Moving The Cruiser " + getName() + " From " + from.getName() + " to " + to.getName());
-            getCurrentPos().undockShip(this);
-            setCurrentPos(to);
-            getCurrentPos().dockShip(this);
-        } else
-            System.out.println("You cannot move the ship from a place other than the current position.");
     }
 
     @Override

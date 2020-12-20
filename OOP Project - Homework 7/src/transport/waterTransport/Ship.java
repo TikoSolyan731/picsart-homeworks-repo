@@ -1,6 +1,6 @@
 package transport.waterTransport;
 
-import reception.waterReception.CargoDock;
+import reception.Reception;
 import reception.waterReception.Dock;
 import transport.Transport;
 
@@ -17,7 +17,13 @@ public abstract class Ship implements Transport {
         this.name = name;
     }
 
-    public abstract void move(Dock from, Dock to);
+    public void moveTo(Reception to) {
+        Dock tempTo = (Dock) to;
+        System.out.println("Moving The Ship " + getName() + " From " + this.currentPos.getPlacement() + " to " + tempTo.getPlacement());
+        this.currentPos.undockShip(this);
+        this.currentPos = tempTo;
+        this.currentPos.dockShip(this);
+    }
 
     public Dock getCurrentPos() {
         return currentPos;

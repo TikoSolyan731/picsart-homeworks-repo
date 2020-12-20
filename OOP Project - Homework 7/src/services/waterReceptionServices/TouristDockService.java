@@ -1,6 +1,5 @@
 package services.waterReceptionServices;
 
-import reception.waterReception.CargoDock;
 import reception.waterReception.TouristDock;
 import transport.waterTransport.Ship;
 
@@ -18,31 +17,12 @@ public class TouristDockService {
 
     public static void printTouristDock(TouristDock dock) {
         System.out.printf("Name: %s, Docked Ships Count: %d, Max Docked Ships: %d, " +
-                        "Current People Count: %d, Max People Count: %d\nDocked Ships:\n", dock.getName(), dock.getDockedShipsCount(),
+                        "Current People Count: %d, Max People Count: %d\nDocked Ships:\n", dock.getPlacement(), dock.getDockedShipsCount(),
                 dock.getMaxDockedShips(), dock.getCurrentPeopleCount(), dock.getMaxPeopleCount());
         for (Ship ship : dock.getDockedShips()) {
             if (ship != null)
                 System.out.printf("\t--%s\n", ship.getName());
         }
-    }
-
-    public static TouristDock createTouristDock() {
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("Dock Name: ");
-        String name = sc.nextLine();
-        System.out.print("Max Docked Ships: ");
-        int count = sc.nextInt();
-        TouristDock td = new TouristDock(name, count);
-
-        System.out.print("Current People Count: ");
-        td.setCurrentPeopleCount(sc.nextInt());
-
-        System.out.print("Max People Count: ");
-        td.setMaxPeopleCount(sc.nextInt());
-        System.out.println("Done!");
-
-        return td;
     }
 
     public static void printNameLeastPeopleCount(TouristDock[] docks) {
@@ -53,7 +33,7 @@ public class TouristDockService {
                 min = d;
         }
 
-        System.out.println("Name: " + min.getName());
+        System.out.println("Name: " + min.getPlacement());
     }
 
     public static void printByMaxPeopleCountAscending(TouristDock[] docks) {
@@ -82,11 +62,11 @@ public class TouristDockService {
     }
 
     public static void writeToFile(TouristDock dock, String path) {
-        String info = FORMATTER.format(FILE_FORMAT, dock.getName(), dock.getDockedShipsCount(),
+        String info = FORMATTER.format(FILE_FORMAT, dock.getPlacement(), dock.getDockedShipsCount(),
                 dock.getMaxDockedShips(), dock.getCurrentPeopleCount(), dock.getMaxPeopleCount()).toString();
 
         try {
-            System.out.println("Writing " + dock.getName() + " to the file.");
+            System.out.println("Writing " + dock.getPlacement() + " to the file.");
             Files.write(Paths.get(path), info.getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {
             System.out.println("IOException: " + e);

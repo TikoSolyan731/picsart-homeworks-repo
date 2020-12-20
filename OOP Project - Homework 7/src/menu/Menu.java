@@ -1,28 +1,26 @@
 package menu;
 
+import reception.Map;
 import reception.waterReception.CargoDock;
-import reception.waterReception.Dock;
 import reception.waterReception.TouristDock;
 import services.waterReceptionServices.CargoDockService;
+import services.waterReceptionServices.DockService;
 import services.waterReceptionServices.TouristDockService;
 import services.waterTransportServices.CargoShipService;
 import services.waterTransportServices.CruiserService;
+import services.waterTransportServices.ShipService;
 import transport.waterTransport.CargoShip;
 import transport.waterTransport.Cruiser;
-import transport.waterTransport.Ship;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
-
     public static void start() {
         Scanner scanner = new Scanner(System.in);
 
         ArrayList<CargoShip> cargoShips = new ArrayList<>();
-        ArrayList<CargoDock> cargoDocks = new ArrayList<>();
         ArrayList<Cruiser> cruisers = new ArrayList<>();
-        ArrayList<TouristDock> touristDocks = new ArrayList<>();
 
         boolean isRunning = true;
 
@@ -41,16 +39,15 @@ public class Menu {
                                 boolean goBack = false;
                                 boolean beforeMethods = true;
 
-                                while (beforeMethods) {
-                                    if (cargoShips.isEmpty()) {
+                                if (cargoShips.isEmpty()) {
+                                    while (beforeMethods) {
                                         System.out.println("You have no objects created. Do you want to create an object of this type?\n" +
                                                 "1.Yes\n2.Go Back");
 
                                         switch (scanner.nextInt()) {
                                             case 1:
-                                                CargoShip cs = CargoShipService.createCargoShip(true, null);
+                                                CargoShip cs = CargoShipService.createCargoShip();
                                                 cargoShips.add(cs);
-                                                cargoDocks.add((CargoDock) cs.getCurrentPos());
 
                                                 beforeMethods = false;
                                                 break;
@@ -75,7 +72,7 @@ public class Menu {
                                     switch (funcNum) {
                                         case 1:
                                             System.out.println("Choose an object.");
-                                            printAvailableShips(cargoShips);
+                                            ShipService.printShips(cargoShips);
 
                                             int objNum = scanner.nextInt();
 
@@ -86,7 +83,7 @@ public class Menu {
                                             break;
                                         case 2:
                                             System.out.println("Choose objects for the array like this (1 2 3 ...)");
-                                            printAvailableShips(cargoShips);
+                                            ShipService.printShips(cargoShips);
 
                                             scanner.nextLine();
                                             String line = scanner.nextLine();
@@ -104,7 +101,7 @@ public class Menu {
                                             break;
                                         case 3:
                                             System.out.println("Choose objects for the array like this (1 2 3 ...)");
-                                            printAvailableShips(cargoShips);
+                                            ShipService.printShips(cargoShips);
 
                                             scanner.nextLine();
                                             line = scanner.nextLine();
@@ -122,7 +119,7 @@ public class Menu {
                                             break;
                                         case 4:
                                             System.out.println("Choose an object.");
-                                            printAvailableShips(cargoShips);
+                                            ShipService.printShips(cargoShips);
                                             objNum = scanner.nextInt();
 
                                             if (objNum == cargoShips.size() + 1)
@@ -134,23 +131,8 @@ public class Menu {
                                             CargoShipService.writeToFile(cargoShips.get(objNum - 1), path);
                                             break;
                                         case 5:
-                                            CargoShip cargoShip;
+                                            CargoShip cargoShip = CargoShipService.createCargoShip();
 
-                                            if (!cargoDocks.isEmpty()) {
-                                                System.out.println("You already have docks created. Do you wish to utilize them or create a new one?");
-                                                printAvailableDocks(cargoDocks);
-                                                System.out.println(cargoDocks.size() + 2 + ".Create New Dock");
-
-                                                int n = scanner.nextInt();
-                                                if (n == cargoDocks.size() + 2) {
-                                                    cargoShip = CargoShipService.createCargoShip(true, null);
-                                                    cargoDocks.add((CargoDock) cargoShip.getCurrentPos());
-                                                } else
-                                                    cargoShip = CargoShipService.createCargoShip(false, cargoDocks.get(n - 1));
-                                            } else {
-                                                cargoShip = CargoShipService.createCargoShip(true, null);
-                                                cargoDocks.add((CargoDock) cargoShip.getCurrentPos());
-                                            }
                                             cargoShips.add(cargoShip);
                                             break;
                                         case 6:
@@ -165,16 +147,16 @@ public class Menu {
                                 goBack = false;
                                 beforeMethods = true;
 
-                                while (beforeMethods) {
-                                    if (cruisers.isEmpty()) {
+
+                                if (cruisers.isEmpty()) {
+                                    while (beforeMethods) {
                                         System.out.println("You have no objects created. Do you want to create an object of this type?\n" +
                                                 "1.Yes\n2.Go Back");
 
                                         switch (scanner.nextInt()) {
                                             case 1:
-                                                Cruiser cruiser = CruiserService.createCruiser(true, null);
+                                                Cruiser cruiser = CruiserService.createCruiser();
                                                 cruisers.add(cruiser);
-                                                touristDocks.add((TouristDock) cruiser.getCurrentPos());
 
                                                 beforeMethods = false;
                                                 break;
@@ -200,7 +182,7 @@ public class Menu {
                                     switch (funcNum) {
                                         case 1:
                                             System.out.println("Choose an object.");
-                                            printAvailableShips(cruisers);
+                                            ShipService.printShips(cruisers);
 
                                             int objNum = scanner.nextInt();
 
@@ -211,7 +193,7 @@ public class Menu {
                                             break;
                                         case 2:
                                             System.out.println("Choose objects for the array like this (1 2 3 ...)");
-                                            printAvailableShips(cruisers);
+                                            ShipService.printShips(cruisers);
 
                                             scanner.nextLine();
                                             String line = scanner.nextLine();
@@ -229,7 +211,7 @@ public class Menu {
                                             break;
                                         case 3:
                                             System.out.println("Choose objects for the array like this (1 2 3 ...)");
-                                            printAvailableShips(cruisers);
+                                            ShipService.printShips(cruisers);
 
                                             scanner.nextLine();
                                             line = scanner.nextLine();
@@ -247,7 +229,7 @@ public class Menu {
                                             break;
                                         case 4:
                                             System.out.println("Choose an object.");
-                                            printAvailableShips(cruisers);
+                                            ShipService.printShips(cruisers);
                                             objNum = scanner.nextInt();
 
                                             if (objNum == cruisers.size() + 1)
@@ -259,23 +241,8 @@ public class Menu {
                                             CruiserService.writeToFile(cruisers.get(objNum - 1), path);
                                             break;
                                         case 5:
-                                            Cruiser cruiser;
+                                            Cruiser cruiser = CruiserService.createCruiser();
 
-                                            if (!cruisers.isEmpty()) {
-                                                System.out.println("You already have docks created. Do you wish to utilize them or create a new one?");
-                                                printAvailableDocks(touristDocks);
-                                                System.out.println(touristDocks.size() + 2 + ".Create New Dock");
-
-                                                int n = scanner.nextInt();
-                                                if (n == touristDocks.size() + 2) {
-                                                    cruiser = CruiserService.createCruiser(true, null);
-                                                    touristDocks.add((TouristDock) cruiser.getCurrentPos());
-                                                } else
-                                                    cruiser = CruiserService.createCruiser(false, touristDocks.get(n - 1));
-                                            } else {
-                                                cruiser = CruiserService.createCruiser(true, null);
-                                                touristDocks.add((TouristDock) cruiser.getCurrentPos());
-                                            }
                                             cruisers.add(cruiser);
                                             break;
                                         case 6:
@@ -306,54 +273,29 @@ public class Menu {
 
                         switch (item) {
                             case 1:
-                                boolean goBack = false;
-                                boolean beforeMethods = true;
-
-                                while (beforeMethods) {
-                                    if (cargoDocks.isEmpty()) {
-                                        System.out.println("You have no objects created. Do you want to create an object of this type?\n" +
-                                                "1.Yes\n2.Go Back");
-
-                                        switch (scanner.nextInt()) {
-                                            case 1:
-                                                CargoDock cargoDock = CargoDockService.createCargoDock();
-                                                cargoDocks.add(cargoDock);
-
-                                                beforeMethods = false;
-                                                break;
-                                            case 2:
-                                                System.out.println("Going Back.");
-                                                beforeMethods = false;
-                                                goBack = true;
-                                                break;
-                                            default:
-                                                beforeMethods = true;
-                                                break;
-                                        }
-                                    }
-                                }
                                 boolean isMethodsMenuActive = true;
 
-                                while (isMethodsMenuActive && !goBack) {
+                                while (isMethodsMenuActive) {
                                     System.out.println("Choose a function:\n1.printCargoDock\n2.printBiggestCargoWeight\n" +
-                                            "3.printDockedCargoShipBiggestMaxWeight\n4.writeToFile\n5.createCargoDock\n6.Go Back");
+                                            "3.printDockedCargoShipBiggestMaxWeight\n4.writeToFile\n5.Go Back");
                                     int funcNum = scanner.nextInt();
 
+                                    ArrayList<Map> cargoDocks;
                                     switch (funcNum) {
                                         case 1:
                                             System.out.println("Choose an object.");
-                                            printAvailableDocks(cargoDocks);
+                                            cargoDocks = DockService.printCargoDocks();
 
                                             int objNum = scanner.nextInt();
 
                                             if (objNum == cargoDocks.size() + 1)
                                                 break;
 
-                                            CargoDockService.printCargoDock(cargoDocks.get(objNum - 1));
+                                            CargoDockService.printCargoDock((CargoDock) cargoDocks.get(objNum - 1).getReceptions().get(0));
                                             break;
                                         case 2:
-                                            System.out.println("Choose objects for the array like this (1 2 3 ...)");
-                                            printAvailableDocks(cargoDocks);
+                                            System.out.println("Choose objects for the array like this: 1 2 3 ...");
+                                            cargoDocks = DockService.printCargoDocks();
 
                                             scanner.nextLine();
                                             String line = scanner.nextLine();
@@ -363,26 +305,26 @@ public class Menu {
                                             }
                                             String[] numsStr = line.split(" ");
 
-                                            CargoDock[] cargoDocks1 = new CargoDock[numsStr.length];
+                                            ArrayList<CargoDock> cargoDocks1 = new ArrayList<>();
                                             for (int i = 0; i < numsStr.length; i++)
-                                                cargoDocks1[i] = cargoDocks.get(Integer.parseInt(numsStr[i]) - 1);
+                                                cargoDocks1.add((CargoDock) cargoDocks.get(Integer.parseInt(numsStr[i]) - 1).getReceptions().get(0));
 
                                             CargoDockService.printBiggestCargoWeight(cargoDocks1);
                                             break;
                                         case 3:
                                             System.out.println("Choose an object.");
-                                            printAvailableDocks(cargoDocks);
+                                            cargoDocks = DockService.printCargoDocks();
 
                                             objNum = scanner.nextInt();
 
                                             if (objNum == cargoDocks.size() + 1)
                                                 break;
 
-                                            CargoDockService.printDockedCargoShipBiggestMaxWeight(cargoDocks.get(objNum - 1));
+                                            CargoDockService.printDockedCargoShipBiggestMaxWeight((CargoDock) cargoDocks.get(objNum - 1).getReceptions().get(0));
                                             break;
                                         case 4:
                                             System.out.println("Choose an object.");
-                                            printAvailableDocks(cargoDocks);
+                                            cargoDocks = DockService.printCargoDocks();
                                             objNum = scanner.nextInt();
 
                                             if (objNum == cargoDocks.size() + 1)
@@ -391,14 +333,9 @@ public class Menu {
                                             System.out.println("Write the path to the file.");
                                             String path = scanner.next();
 
-                                            CargoDockService.writeToFile(cargoDocks.get(objNum - 1), path);
+                                            CargoDockService.writeToFile((CargoDock) cargoDocks.get(objNum - 1).getReceptions().get(0), path);
                                             break;
                                         case 5:
-                                            CargoDock cargoDock = CargoDockService.createCargoDock();
-
-                                            cargoDocks.add(cargoDock);
-                                            break;
-                                        case 6:
                                             System.out.println("Going Back.");
                                             isMethodsMenuActive = false;
                                             break;
@@ -406,54 +343,29 @@ public class Menu {
                                 }
                                 break;
                             case 2:
-                                goBack = false;
-                                beforeMethods = true;
-
-                                while (beforeMethods) {
-                                    if (touristDocks.isEmpty()) {
-                                        System.out.println("You have no objects created. Do you want to create an object of this type?\n" +
-                                                "1.Yes\n2.Go Back");
-
-                                        switch (scanner.nextInt()) {
-                                            case 1:
-                                                TouristDock touristDock = TouristDockService.createTouristDock();
-                                                touristDocks.add(touristDock);
-
-                                                beforeMethods = false;
-                                                break;
-                                            case 2:
-                                                System.out.println("Going Back.");
-                                                beforeMethods = false;
-                                                goBack = true;
-                                                break;
-                                            default:
-                                                beforeMethods = true;
-                                                break;
-                                        }
-                                    }
-                                }
                                 isMethodsMenuActive = true;
 
-                                while (isMethodsMenuActive && !goBack) {
+                                while (isMethodsMenuActive) {
                                     System.out.println("Choose a function:\n1.printTouristDock\n2.printNameLeastPeopleCount\n" +
-                                            "3.printByMaxPeopleCountAscending\n4.writeToFile\n5.createTouristDock\n6.Go Back");
+                                            "3.printByMaxPeopleCountAscending\n4.writeToFile\n5.Go Back");
                                     int funcNum = scanner.nextInt();
 
+                                    ArrayList<Map> touristDocks;
                                     switch (funcNum) {
                                         case 1:
                                             System.out.println("Choose an object.");
-                                            printAvailableDocks(touristDocks);
+                                            touristDocks = DockService.printTouristDocks();
 
                                             int objNum = scanner.nextInt();
 
                                             if (objNum == touristDocks.size() + 1)
                                                 break;
 
-                                            TouristDockService.printTouristDock(touristDocks.get(objNum - 1));
+                                            TouristDockService.printTouristDock((TouristDock) touristDocks.get(objNum - 1).getReceptions().get(1));
                                             break;
                                         case 2:
                                             System.out.println("Choose objects for the array like this (1 2 3 ...)");
-                                            printAvailableDocks(touristDocks);
+                                            touristDocks = DockService.printTouristDocks();
 
                                             scanner.nextLine();
                                             String line = scanner.nextLine();
@@ -465,13 +377,13 @@ public class Menu {
 
                                             TouristDock[] touristDocks1 = new TouristDock[numsStr.length];
                                             for (int i = 0; i < numsStr.length; i++)
-                                                touristDocks1[i] = touristDocks.get(Integer.parseInt(numsStr[i]) - 1);
+                                                touristDocks1[i] = (TouristDock) touristDocks.get(Integer.parseInt(numsStr[i]) - 1).getReceptions().get(1);
 
                                             TouristDockService.printNameLeastPeopleCount(touristDocks1);
                                             break;
                                         case 3:
                                             System.out.println("Choose objects for the array like this (1 2 3 ...)");
-                                            printAvailableDocks(touristDocks);
+                                            touristDocks = DockService.printTouristDocks();
 
                                             scanner.nextLine();
                                             line = scanner.nextLine();
@@ -483,13 +395,13 @@ public class Menu {
 
                                             touristDocks1 = new TouristDock[numsStr.length];
                                             for (int i = 0; i < numsStr.length; i++)
-                                                touristDocks1[i] = touristDocks.get(Integer.parseInt(numsStr[i]) - 1);
+                                                touristDocks1[i] = (TouristDock) touristDocks.get(Integer.parseInt(numsStr[i]) - 1).getReceptions().get(1);
 
                                             TouristDockService.printByMaxPeopleCountAscending(touristDocks1);
                                             break;
                                         case 4:
                                             System.out.println("Choose an object.");
-                                            printAvailableDocks(touristDocks);
+                                            touristDocks = DockService.printTouristDocks();
                                             objNum = scanner.nextInt();
 
                                             if (objNum == touristDocks.size() + 1)
@@ -498,14 +410,9 @@ public class Menu {
                                             System.out.println("Write the path to the file.");
                                             String path = scanner.next();
 
-                                            TouristDockService.writeToFile(touristDocks.get(objNum - 1), path);
+                                            TouristDockService.writeToFile((TouristDock) touristDocks.get(objNum - 1).getReceptions().get(1), path);
                                             break;
                                         case 5:
-                                            TouristDock touristDock = TouristDockService.createTouristDock();
-
-                                            touristDocks.add(touristDock);
-                                            break;
-                                        case 6:
                                             System.out.println("Going Back.");
                                             isMethodsMenuActive = false;
                                             break;
@@ -528,27 +435,5 @@ public class Menu {
                     break;
             }
         }
-    }
-
-    private static void printAvailableShips(ArrayList<? extends Ship> list) {
-        var iter = list.iterator();
-        int i = 1;
-
-        while (iter.hasNext()) {
-            System.out.println(i + "." + iter.next().getName());
-            i++;
-        }
-        System.out.println(i + ".Go Back");
-    }
-
-    private static void printAvailableDocks(ArrayList<? extends Dock> list) {
-        var iter = list.iterator();
-        int i = 1;
-
-        while (iter.hasNext()) {
-            System.out.println(i + "." + iter.next().getName());
-            i++;
-        }
-        System.out.println(i + ".Go Back");
     }
 }
