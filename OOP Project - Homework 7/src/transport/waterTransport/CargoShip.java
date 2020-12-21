@@ -19,41 +19,56 @@ public class CargoShip extends Ship implements CargoTransport {
     }
 
     @Override
-    public void transport(double weight, CargoReception from, CargoReception to) {
-        if (from instanceof CargoDock && to instanceof CargoDock) {
-            CargoDock tempFrom = (CargoDock) from;
+    public boolean transportTo(double weight, CargoReception to) {
+        if (getCurrentPos() instanceof CargoDock && to instanceof CargoDock) {
             CargoDock tempTo = (CargoDock) to;
+            CargoDock from = (CargoDock) getCurrentPos();
 
-            if (weight > tempFrom.getCurrentCargoWeight() || weight + getCargoWeight() > getMaxCargoWeight()
-                    || !getCurrentPos().equals(from)) {
-                System.out.println("Cannot transport");
-                return;
+            if (weight > from.getCurrentCargoWeight()) {
+                System.out.println("Cannot Transport - The Inputted Weight Is Over The Current Cargo Weight Of The Dock.");
+                return false;
+            }
+            if (weight + getCargoWeight() > getMaxCargoWeight()) {
+                System.out.println("Cannot Transport - Weight Is Over The Max Cargo Weight Of The Ship.");
+                return false;
             }
 
-            System.out.println("Transporting " + weight + " cargo from " + tempFrom.getPlacement() + " to " + tempTo.getPlacement());
-            tempFrom.sendCargo(weight, this, to);
+            System.out.println("Transporting " + weight + " cargo from " + from.getPlacement() + " to " + tempTo.getPlacement());
+            from.sendCargo(weight, this, to);
             this.moveTo(tempTo);
             tempTo.acceptCargo(weight, this, from);
-        } else
-            System.out.println("Transportation allowed only from Cargo Dock to other Cargo Dock.");
+
+            return true;
+        }
+
+        System.out.println("Transportation allowed only from Cargo Dock to other Cargo Dock.");
+        return false;
     }
 
 
     @Override
-    public void takeFromCurrentPos(double weight) {
+    public boolean takeFromCurrentPos(double weight) {
         if (getCurrentPos() instanceof CargoDock) {
             CargoDock curPos = (CargoDock) getCurrentPos();
 
-            if (weight > curPos.getCurrentCargoWeight() || weight + getCargoWeight() > getMaxCargoWeight()) {
-                System.out.println("Cannot take cargo.");
-                return;
+            if (weight > curPos.getCurrentCargoWeight()) {
+                System.out.println("Cannot Take Cargo - The Inputted Weight Is Over The Current Cargo Weight Of The Dock.");
+                return false;
+            }
+            if (weight + getCargoWeight() > getMaxCargoWeight()) {
+                System.out.println("Cannot Take Cargo - Weight Is Over The Max Cargo Weight Of The Ship.");
+                return false;
             }
 
             System.out.println("Taking " + weight + " cargo from current dock.");
             curPos.setCurrentCargoWeight(curPos.getCurrentCargoWeight() - weight);
             setCargoWeight(getCargoWeight() + weight);
-        } else
-            System.out.println("Currently not in a Cargo Dock.");
+
+            return true;
+        }
+
+        System.out.println("Currently not in a Cargo Dock.");
+        return false;
     }
 
     @Override
@@ -79,7 +94,11 @@ public class CargoShip extends Ship implements CargoTransport {
     }
 
     @Override
-    public double empty() {
+    public double dump() {
+        if (getCargoWeight() <= 0) {
+            System.out.println("The Ship Is Already Empty.");
+            return 0;
+        }
         System.out.println("\nEmptying the ship " + getName() + ".");
         double temp = getCargoWeight();
         setCargoWeight(0);

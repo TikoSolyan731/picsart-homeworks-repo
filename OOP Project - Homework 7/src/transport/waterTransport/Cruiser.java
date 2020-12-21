@@ -20,23 +20,30 @@ public class Cruiser extends Ship implements TouristTransport {
     }
 
     @Override
-    public void transport(int peopleCount, TouristReception from, TouristReception to) {
-        if (from instanceof TouristDock && to instanceof TouristDock) {
-            TouristDock tempFrom = (TouristDock) from;
+    public boolean transport(int peopleCount, TouristReception to) {
+        if (getCurrentPos() instanceof TouristDock && to instanceof TouristDock) {
+            TouristDock tempFrom = (TouristDock) getCurrentPos();
             TouristDock tempTo = (TouristDock) to;
 
-            if (peopleCount + getPassengerCount() > getMaxPassengerCount()
-                    || !getCurrentPos().equals(from)) {
-                System.out.println("Cannot transport");
-                return;
+            if (peopleCount > tempFrom.getCurrentPeopleCount()) {
+                System.out.println("Cannot Transport - The Inputted Number Of People Is Over The Current Number At The Dock.");
+                return false;
+            }
+            if (peopleCount + getPassengerCount() > getMaxPassengerCount()) {
+                System.out.println("Cannot Transport - The Number Of People Is Over The Max Capacity Of The Ship.");
+                return false;
             }
 
             System.out.println("Transporting " + peopleCount + " tourists from " + tempFrom.getPlacement() + " to " + tempTo.getPlacement());
             tempFrom.sendPeople(peopleCount, this, to);
             this.moveTo(tempTo);
-            tempTo.acceptPeople(peopleCount, this, from);
-        } else
-            System.out.println("Transportation allowed only from Cargo Dock to other Cargo Dock.");
+            tempTo.acceptPeople(peopleCount, this, tempFrom);
+
+            return true;
+        }
+
+        System.out.println("Transportation allowed only from Tourist Dock to other Tourist Dock.");
+        return false;
     }
 
     @Override

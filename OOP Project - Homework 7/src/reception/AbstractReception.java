@@ -1,13 +1,13 @@
 package reception;
 
 public abstract class AbstractReception implements Reception {
-    private final Map placement;
+    private final City placement;
 
-    public AbstractReception(Map placement) {
+    public AbstractReception(City placement) {
         this.placement = placement;
     }
 
-    public Map getPlacement() {
+    public City getPlacement() {
         return placement;
     }
 }

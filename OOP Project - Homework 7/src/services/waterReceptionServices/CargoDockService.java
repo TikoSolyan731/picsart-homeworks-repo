@@ -1,6 +1,5 @@
 package services.waterReceptionServices;
 
-import reception.Map;
 import reception.waterReception.CargoDock;
 import services.waterReceptionServices.comparators.CargoWeightComparator;
 import services.waterTransportServices.CargoShipService;
@@ -14,7 +13,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Formatter;
-import java.util.Scanner;
 
 public class CargoDockService {
     private static final String FILE_FORMAT = "%s,%d,%d,%.1f\n";

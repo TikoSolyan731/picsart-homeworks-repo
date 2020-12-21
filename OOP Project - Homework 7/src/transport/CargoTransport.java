@@ -3,8 +3,8 @@ package transport;
 import reception.CargoReception;
 
 public interface CargoTransport extends Transport {
-    double empty();
+    double dump();
     double emptyToCurrentPos();
-    void takeFromCurrentPos(double weight);
-    void transport(double weight, CargoReception from, CargoReception to);
+    boolean takeFromCurrentPos(double weight);
+    boolean transportTo(double weight, CargoReception to);
 }

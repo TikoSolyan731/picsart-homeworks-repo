@@ -1,6 +1,6 @@
 package reception.waterReception;
 
-import reception.Map;
+import reception.City;
 import reception.TouristReception;
 import transport.TouristTransport;
 import transport.waterTransport.Cruiser;
@@ -10,11 +10,11 @@ public class TouristDock extends Dock implements TouristReception {
     private int currentPeopleCount = 0;
     private int maxPeopleCount = 2000;
 
-    public TouristDock(Map placement, int maxDockedShips) {
+    public TouristDock(City placement, int maxDockedShips) {
         super(placement, maxDockedShips);
     }
 
-    public TouristDock(Map placement, int maxDockedShips, int currentPeopleCount, int maxPeopleCount) {
+    public TouristDock(City placement, int maxDockedShips, int currentPeopleCount, int maxPeopleCount) {
         super(placement, maxDockedShips);
         this.currentPeopleCount = currentPeopleCount;
         this.maxPeopleCount = maxPeopleCount;
@@ -99,7 +99,6 @@ public class TouristDock extends Dock implements TouristReception {
 
     @Override
     public String toString() {
-        return "Tourist Dock:" +
-                "Current People Count = " + currentPeopleCount;
+        return "Tourist Dock : People = " + currentPeopleCount;
     }
 }

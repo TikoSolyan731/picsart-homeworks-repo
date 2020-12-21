@@ -9,7 +9,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Formatter;
-import java.util.Scanner;
 
 public class TouristDockService {
     private static final String FILE_FORMAT = "%s,%d,%d,%d,%d\n";

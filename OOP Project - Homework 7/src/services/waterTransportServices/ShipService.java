@@ -11,7 +11,9 @@ public class ShipService {
         int i = 1;
 
         while (iter.hasNext()) {
-            sb.append(i).append(".").append(iter.next().getName()).append('\n');
+            Ship next = iter.next();
+            sb.append(i).append(".").append(next.getName()).append(" - ").append(next.getCurrentPos().getPlacement())
+                    .append(" ").append(next.getCurrentPos()).append('\n');
             i++;
         }
         sb.append(i).append(".Go Back").append('\n');

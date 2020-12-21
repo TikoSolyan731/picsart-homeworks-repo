@@ -1,6 +1,6 @@
 package menu;
 
-import reception.Map;
+import reception.City;
 import reception.waterReception.CargoDock;
 import reception.waterReception.TouristDock;
 import services.waterReceptionServices.CargoDockService;
@@ -65,8 +65,9 @@ public class Menu {
                                 boolean isMethodsMenuActive = true;
 
                                 while (isMethodsMenuActive && !goBack) {
-                                    System.out.println("Choose a function:\n1.printCargoShip\n2.printNameBiggestMaxCargo\n" +
-                                            "3.printLowestCargo\n4.writeToFile\n5.createCargoShip\n6.Go Back");
+                                    System.out.println("Choose a function\n-------- SERVICES --------\n1.Print A Cargo Ship\n2.Print The Name Of The Cargo Ship With The Biggest Current Cargo Weight\n" +
+                                            "3.Print The Ship With The Least Cargo Weight\n4.Write The Ship To A File\n5.Create A New Cargo Ship\n-------- CONTROLS --------\n6.Move A Ship To A New City\n7.Transport Cargo To A City\n" +
+                                            "8.Take Cargo Onto The Ship From Its Dock\n9.Empty A Ship's Cargo Into Its Dock\n10.Dump A Ship's Cargo Into The Ocean\n11.Go Back");
                                     int funcNum = scanner.nextInt();
 
                                     switch (funcNum) {
@@ -136,6 +137,97 @@ public class Menu {
                                             cargoShips.add(cargoShip);
                                             break;
                                         case 6:
+                                            System.out.println("Choose The Ship You Want To Move:");
+                                            ShipService.printShips(cargoShips);
+                                            objNum = scanner.nextInt();
+                                            if (objNum == cargoShips.size() + 1)
+                                                break;
+
+                                            CargoShip toMove = cargoShips.get(objNum - 1);
+
+                                            System.out.println("Choose The City You Want To Move The Ship To:");
+                                            ArrayList<City> presentCities = City.printPlaces(toMove.getCurrentPos().getPlacement());
+                                            int placeNum = scanner.nextInt();
+                                            if (placeNum == presentCities.size() + 1)
+                                                break;
+
+                                            City city = presentCities.get(placeNum - 1);
+                                            System.out.println("Choose The Dock Of The City (You Can Choose Any Type Of Dock):");
+                                            int j = City.printDocksOfPlace(city);
+                                            int dockNum = scanner.nextInt();
+                                            if (dockNum == j)
+                                                break;
+
+                                            toMove.moveTo(city.getReceptions().get(dockNum - 1));
+                                            System.out.println("The Ship " + toMove.getName() + " Has Moved To The City Of " + city + ".");
+                                            break;
+                                        case 7:
+                                            System.out.println("Choose The Ship You Want To Transport Cargo With:");
+                                            ShipService.printShips(cargoShips);
+                                            objNum = scanner.nextInt();
+                                            if (objNum == cargoShips.size() + 1)
+                                                break;
+
+                                            CargoShip toTransport = cargoShips.get(objNum - 1);
+
+                                            System.out.println("Choose The City You Want To Move The Ship To:");
+                                            ArrayList<City> cargoDocksPlaces = DockService.printCargoDocks();
+                                            placeNum = scanner.nextInt();
+                                            if (placeNum == cargoDocksPlaces.size() + 1)
+                                                break;
+                                            city = cargoDocksPlaces.get(placeNum - 1);
+                                            CargoDock dock = (CargoDock) city.getReceptions().get(0);
+
+                                            double maxWeight = Math.min((toTransport.getMaxCargoWeight() - toTransport.getCargoWeight()), ((CargoDock) toTransport.getCurrentPos()).getCurrentCargoWeight());
+                                            System.out.println("Enter The Amount Of Cargo To Transport (0 < Weight <= " + maxWeight + ")");
+                                            double weight = scanner.nextDouble();
+
+                                            if (toTransport.transportTo(weight, dock))
+                                                System.out.println("The Ship " + toTransport.getName() + " Has Transported " + weight + " Cargo To The City Of " + city + ".");
+                                            break;
+                                        case 8:
+                                            System.out.println("Choose The Ship You Want To Load With Cargo:");
+                                            ShipService.printShips(cargoShips);
+                                            objNum = scanner.nextInt();
+                                            if (objNum == cargoShips.size() + 1)
+                                                break;
+
+                                            CargoShip ship = cargoShips.get(objNum - 1);
+
+                                            maxWeight = Math.min((ship.getMaxCargoWeight() - ship.getCargoWeight()), ((CargoDock) ship.getCurrentPos()).getCurrentCargoWeight());
+
+                                            System.out.println("Enter The Amount Of Cargo To Take (0 < Weight <= " + maxWeight + ")");
+                                            weight = scanner.nextDouble();
+
+                                            if (ship.takeFromCurrentPos(weight))
+                                                System.out.println("The Ship " + ship.getName() + " Has Taken " + weight + " Cargo Onto Its Board.");
+                                            break;
+                                        case 9:
+                                            System.out.println("Choose The Ship You Want To Empty:");
+                                            ShipService.printShips(cargoShips);
+                                            objNum = scanner.nextInt();
+                                            if (objNum == cargoShips.size() + 1)
+                                                break;
+
+                                            ship = cargoShips.get(objNum - 1);
+                                            double temp = ship.emptyToCurrentPos();
+                                            if (temp > 0)
+                                                System.out.println("The Ship " + ship.getName() + " Has Emptied " + temp + " Cargo Into Its Dock.");
+                                            break;
+                                        case 10:
+                                            System.out.println("Choose The Ship You Want To Empty:");
+                                            ShipService.printShips(cargoShips);
+                                            objNum = scanner.nextInt();
+                                            if (objNum == cargoShips.size() + 1)
+                                                break;
+
+                                            ship = cargoShips.get(objNum - 1);
+
+                                            temp = ship.dump();
+                                            if (temp > 0)
+                                                System.out.println("The Ship " + ship.getName() + " Has Dumped " + temp + " Cargo Into The Ocean.");
+                                            break;
+                                        case 11:
                                             System.out.println("Going Back.");
                                             isMethodsMenuActive = false;
                                             break;
@@ -175,8 +267,9 @@ public class Menu {
                                 isMethodsMenuActive = true;
 
                                 while (isMethodsMenuActive && !goBack) {
-                                    System.out.println("Choose a function:\n1.printCruiser\n2.printTicketCostAscending\n" +
-                                            "3.printLeastPassengerCount\n4.writeToFile\n5.createCruiser\n6.Go Back");
+                                    System.out.println("Choose a function\n-------- SERVICES --------\n1.Print A Cruiser\n2.Print The Ships In Ascending Order By Ticket Cost\n" +
+                                            "3.Print The Ship With The Least Number Of Passengers\n4.Write The Ship To A File\n5.Create A New Cruiser\n" +
+                                            "-------- CONTROLS --------\n6.Move A Ship To A New City\n7.Transport People To A City\n.Go Back");
                                     int funcNum = scanner.nextInt();
 
                                     switch (funcNum) {
@@ -246,6 +339,55 @@ public class Menu {
                                             cruisers.add(cruiser);
                                             break;
                                         case 6:
+                                            System.out.println("Choose The Ship You Want To Move:");
+                                            ShipService.printShips(cruisers);
+                                            objNum = scanner.nextInt();
+                                            if (objNum == cargoShips.size() + 1)
+                                                break;
+
+                                            Cruiser toMove = cruisers.get(objNum - 1);
+
+                                            System.out.println("Choose The City You Want To Move The Ship To:");
+                                            ArrayList<City> presentCities = City.printPlaces(toMove.getCurrentPos().getPlacement());
+                                            int placeNum = scanner.nextInt();
+                                            if (placeNum == presentCities.size() + 1)
+                                                break;
+
+                                            City city = presentCities.get(placeNum - 1);
+                                            System.out.println("Choose The Dock Of The City (You Can Choose Any Type Of Dock):");
+                                            int j = City.printDocksOfPlace(city);
+                                            int dockNum = scanner.nextInt();
+                                            if (dockNum == j)
+                                                break;
+
+                                            toMove.moveTo(city.getReceptions().get(dockNum - 1));
+                                            System.out.println("The Ship " + toMove.getName() + " Has Moved To The City Of " + city + ".");
+                                            break;
+                                        case 7:
+                                            System.out.println("Choose The Ship You Want To Transport People With:");
+                                            ShipService.printShips(cruisers);
+                                            objNum = scanner.nextInt();
+                                            if (objNum == cargoShips.size() + 1)
+                                                break;
+
+                                            Cruiser toTransport = cruisers.get(objNum - 1);
+
+                                            System.out.println("Choose The City You Want To Move The Ship To:");
+                                            ArrayList<City> touristDocks = DockService.printTouristDocks();
+                                            placeNum = scanner.nextInt();
+                                            if (placeNum == touristDocks.size() + 1)
+                                                break;
+                                            city = touristDocks.get(placeNum - 1);
+                                            TouristDock dock = (TouristDock) city.getReceptions().get(1);
+
+                                            int maxPeople = Math.min((toTransport.getMaxPassengerCount() - toTransport.getPassengerCount()), ((TouristDock) toTransport.getCurrentPos()).getCurrentPeopleCount());
+                                            System.out.println("Enter The Number Of People To Transport (0 < People <= " + maxPeople + ")");
+                                            int people = scanner.nextInt();
+
+                                            if (toTransport.transport(people, dock))
+                                                System.out.println("The Ship " + toTransport.getName() + " Has Transported " + people + " People To The City Of " + city + ".");
+                                            break;
+                                        case 8:
                                             System.out.println("Going Back.");
                                             isMethodsMenuActive = false;
                                             break;
@@ -280,7 +422,7 @@ public class Menu {
                                             "3.printDockedCargoShipBiggestMaxWeight\n4.writeToFile\n5.Go Back");
                                     int funcNum = scanner.nextInt();
 
-                                    ArrayList<Map> cargoDocks;
+                                    ArrayList<City> cargoDocks;
                                     switch (funcNum) {
                                         case 1:
                                             System.out.println("Choose an object.");
@@ -350,7 +492,7 @@ public class Menu {
                                             "3.printByMaxPeopleCountAscending\n4.writeToFile\n5.Go Back");
                                     int funcNum = scanner.nextInt();
 
-                                    ArrayList<Map> touristDocks;
+                                    ArrayList<City> touristDocks;
                                     switch (funcNum) {
                                         case 1:
                                             System.out.println("Choose an object.");

@@ -1,7 +1,7 @@
 package main;
 
 import menu.Menu;
-import reception.Map;
+import reception.City;
 import reception.waterReception.CargoDock;
 import reception.waterReception.TouristDock;
 import services.waterTransportServices.CargoShipService;
@@ -22,12 +22,12 @@ public class Project {
 
         // Part 1. The main classes and functionality.
 
-//        CargoDock d1 = new CargoDock(Map., 5, 4500);
-//        CargoDock d2 = new CargoDock(Map., 6, 6000);
-//        TouristDock d3 = new TouristDock(Map.RIO_DE_JANEIRO, 5, 420, 1000);
-//        TouristDock d4 = new TouristDock(Map.SINGAPORE, 6);
-        TouristDock sydTourist = (TouristDock) Map.SYDNEY.getReceptions().get(1);
-        CargoDock roterCargo = (CargoDock) Map.ROTTERDAM.getReceptions().get(0);
+//        CargoDock d1 = new CargoDock(City., 5, 4500);
+//        CargoDock d2 = new CargoDock(City., 6, 6000);
+//        TouristDock d3 = new TouristDock(City.RIO_DE_JANEIRO, 5, 420, 1000);
+//        TouristDock d4 = new TouristDock(City.SINGAPORE, 6);
+        TouristDock sydTourist = (TouristDock) City.SYDNEY.getReceptions().get(1);
+        CargoDock roterCargo = (CargoDock) City.ROTTERDAM.getReceptions().get(0);
 
 
         CargoShip sh1 = new CargoShip(roterCargo, "bla bla1");

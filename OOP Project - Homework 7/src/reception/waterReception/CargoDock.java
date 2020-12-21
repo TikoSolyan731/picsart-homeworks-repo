@@ -1,7 +1,7 @@
 package reception.waterReception;
 
 import reception.CargoReception;
-import reception.Map;
+import reception.City;
 import transport.CargoTransport;
 import transport.waterTransport.CargoShip;
 import transport.waterTransport.Ship;
@@ -9,18 +9,17 @@ import transport.waterTransport.Ship;
 public class CargoDock extends Dock implements CargoReception {
     private double currentCargoWeight = 0;
 
-    public CargoDock(Map placement, int maxDockedShips) {
+    public CargoDock(City placement, int maxDockedShips) {
         super(placement, maxDockedShips);
     }
 
-    public CargoDock(Map placement, int maxDockedShips, double currentCargoWeight) {
+    public CargoDock(City placement, int maxDockedShips, double currentCargoWeight) {
         super(placement, maxDockedShips);
         this.currentCargoWeight = currentCargoWeight;
     }
 
     @Override
     public void dockShip(Ship ship) {
-        //System.out.println("Docking a ship at Cargo Dock " + getName() + ".");
         for (int i = 0; i < getDockedShips().length; i++) {
             if (getDockedShips()[i] != null)
                 continue;
@@ -35,8 +34,6 @@ public class CargoDock extends Dock implements CargoReception {
 
     @Override
     public void undockShip(Ship ship) {
-        //System.out.println("Undocking the ship " + ship.getName() + " from Cargo Dock " + getName() + ".");
-
         for (int i = 0; i < getDockedShips().length; i++) {
             if (getDockedShips()[i] == ship) {
                 getDockedShips()[i] = null;
@@ -90,7 +87,6 @@ public class CargoDock extends Dock implements CargoReception {
 
     @Override
     public String toString() {
-        return "Cargo Dock:" +
-                "Current Cargo Weight = " + currentCargoWeight;
+        return "Cargo Dock : Cargo = " + currentCargoWeight;
     }
 }

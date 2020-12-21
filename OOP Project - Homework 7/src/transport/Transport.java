@@ -1,8 +1,8 @@
 package transport;
 
-import reception.Reception;
+import reception.AbstractReception;
 
 public interface Transport {
     void upgrade();
-    void moveTo(Reception to);
+    void moveTo(AbstractReception to);
 }

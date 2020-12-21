@@ -1,6 +1,6 @@
 package services.waterTransportServices;
 
-import reception.Map;
+import reception.City;
 import reception.waterReception.CargoDock;
 import transport.waterTransport.CargoShip;
 import utils.Utils;
@@ -27,9 +27,9 @@ public class CargoShipService {
         StringBuilder sb = new StringBuilder();
 
         System.out.println("Choose the place to create the ship at: ");
-        Map[] places = Map.values();
+        City[] places = City.values();
         int i = 1;
-        for (Map place : places) {
+        for (City place : places) {
             sb.append(i++).append(".").append(place).append(" - has ").append(place.getReceptions()).append('\n');
         }
 

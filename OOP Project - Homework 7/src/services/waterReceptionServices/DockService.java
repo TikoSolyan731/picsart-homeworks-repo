@@ -1,20 +1,20 @@
 package services.waterReceptionServices;
 
 import reception.AbstractReception;
-import reception.Map;
+import reception.City;
 import reception.waterReception.CargoDock;
 import reception.waterReception.TouristDock;
 
 import java.util.ArrayList;
 
 public class DockService {
-    public static ArrayList<Map> printCargoDocks() {
+    public static ArrayList<City> printCargoDocks() {
         StringBuilder sb = new StringBuilder();
-        ArrayList<Map> placesWithCargoDocks = new ArrayList<>();
+        ArrayList<City> placesWithCargoDocks = new ArrayList<>();
         int i = 1;
 
-        Map[] places = Map.values();
-        for (Map place : places) {
+        City[] places = City.values();
+        for (City place : places) {
             AbstractReception dock = place.getReceptions().get(0);
             if (dock instanceof CargoDock) {
                 sb.append(i++).append(".").append(place).append(" - ").append(dock).append('\n');
@@ -27,13 +27,13 @@ public class DockService {
         return placesWithCargoDocks;
     }
 
-    public static ArrayList<Map> printTouristDocks() {
+    public static ArrayList<City> printTouristDocks() {
         StringBuilder sb = new StringBuilder();
-        ArrayList<Map> placesWithTouristDocks = new ArrayList<>();
+        ArrayList<City> placesWithTouristDocks = new ArrayList<>();
         int i = 1;
 
-        Map[] places = Map.values();
-        for (Map place : places) {
+        City[] places = City.values();
+        for (City place : places) {
             AbstractReception dock = place.getReceptions().get(1);
             if (dock instanceof TouristDock) {
                 sb.append(i++).append(".").append(place).append(" - ").append(dock).append('\n');

@@ -1,5 +1,6 @@
 package transport.waterTransport;
 
+import reception.AbstractReception;
 import reception.Reception;
 import reception.waterReception.Dock;
 import transport.Transport;
@@ -17,11 +18,11 @@ public abstract class Ship implements Transport {
         this.name = name;
     }
 
-    public void moveTo(Reception to) {
-        Dock tempTo = (Dock) to;
-        System.out.println("Moving The Ship " + getName() + " From " + this.currentPos.getPlacement() + " to " + tempTo.getPlacement());
+    @Override
+    public void moveTo(AbstractReception to) {
+        System.out.println("Moving The Ship " + getName() + " From " + this.currentPos.getPlacement() + " to " + to.getPlacement());
         this.currentPos.undockShip(this);
-        this.currentPos = tempTo;
+        this.currentPos = (Dock) to;
         this.currentPos.dockShip(this);
     }
 

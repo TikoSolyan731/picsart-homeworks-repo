@@ -1,8 +1,7 @@
 package reception.waterReception;
 
 import reception.AbstractReception;
-import reception.Map;
-import reception.Reception;
+import reception.City;
 import transport.waterTransport.Ship;
 
 import java.util.Arrays;
@@ -12,7 +11,7 @@ public abstract class Dock extends AbstractReception {
     private int dockedShipsCount = 0;
     private Ship[] dockedShips;
 
-    public Dock(Map placement, int maxDockedShips) {
+    public Dock(City placement, int maxDockedShips) {
         super(placement);
         this.maxDockedShips = maxDockedShips;
         dockedShips = new Ship[maxDockedShips];
