@@ -9,10 +9,12 @@ import transport.waterTransport.CargoShip;
 import transport.waterTransport.Cruiser;
 import transport.waterTransport.Ship;
 
+import java.io.IOException;
+
 public class Project {
     static final String PATH = "cargo.txt";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         //          Transport (interface)                             Reception (interface)
         //               /   |     \                                      /      |      \
         //CargoTransport    Ship     TouristTransport        CargoReception    Dock     TouristReception

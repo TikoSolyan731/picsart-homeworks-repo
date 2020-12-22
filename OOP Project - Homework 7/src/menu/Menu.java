@@ -1,5 +1,6 @@
 package menu;
 
+import auth.DB;
 import reception.City;
 import reception.waterReception.CargoDock;
 import reception.waterReception.TouristDock;
@@ -12,11 +13,90 @@ import services.waterTransportServices.ShipService;
 import transport.waterTransport.CargoShip;
 import transport.waterTransport.Cruiser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
-    public static void start() {
+    private static final DB db;
+
+    static {
+        db = DB.getInstance();
+    }
+
+    private static void validation() throws IOException {
+        Scanner sc = new Scanner(System.in);
+        boolean hasLoginned = false;
+
+        while (!hasLoginned) {
+            System.out.println("Login Or Register\n1.Login\t2.Register");
+
+            int n = sc.nextInt();
+            switch (n) {
+                case 1:
+                    System.out.println("Enter these fields");
+                    System.out.print("Username - ");
+
+                    sc.nextLine();
+
+                    String loginUsername = sc.next();
+                    System.out.print("Password - ");
+                    String loginPassword = sc.next();
+
+                    if(db.login(loginUsername, loginPassword)) {
+                        System.out.println("Login Successful!");
+                        hasLoginned = true;
+                    } else
+                        System.out.println("The User Does Not Exist.");
+
+                    break;
+                case 2:
+                    System.out.println("Enter these fields");
+                    System.out.print("Full Name (Name Surname) - ");
+
+                    sc.nextLine();
+                    String fullName = sc.nextLine();
+                    while (!db.validateName(fullName)) {
+                        System.out.println("You Entered Full Name Incorrectly!");
+                        System.out.print("Full Name (Name Surname) - ");
+                        fullName = sc.nextLine();
+                    }
+                    System.out.print("Username (More Than 10 Characters) - ");
+
+                    String username = sc.next();
+                    while (!db.validateUsername(username)) {
+                        System.out.print("Username (More Than 10 Characters) - ");
+                        username = sc.next();
+                    }
+                    System.out.print("Email - ");
+
+                    String email = sc.next();
+                    while (!db.validateEmail(email)) {
+                        System.out.println("Your Input Is Not An Email!");
+                        System.out.print("Email - ");
+                        email = sc.next();
+                    }
+                    System.out.print("Password (More Than 8 Characters, 2 Uppercase, 3 Numbers) - ");
+
+                    String password = sc.next();
+                    while (!db.validatePassword(password)) {
+                        System.out.println("You Entered Password Incorrectly!");
+                        System.out.print("Password (More Than 8 Characters, 2 Uppercase, 3 Numbers) - ");
+                        password = sc.next();
+                    }
+
+                    if (!db.register(fullName, username, email, password))
+                        System.out.println("Could Not Register");
+                    else
+                        System.out.println("Registered Successfully!");
+                    break;
+            }
+        }
+    }
+
+    public static void start() throws IOException {
+        validation();
+
         Scanner scanner = new Scanner(System.in);
 
         ArrayList<CargoShip> cargoShips = new ArrayList<>();
