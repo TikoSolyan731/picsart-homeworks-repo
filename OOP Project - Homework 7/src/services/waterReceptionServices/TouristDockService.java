@@ -7,8 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
-import java.util.Formatter;
+import java.util.*;
 
 public class TouristDockService {
     private static final String FILE_FORMAT = "%s,%d,%d,%d,%d\n";
@@ -24,38 +23,27 @@ public class TouristDockService {
         }
     }
 
-    public static void printNameLeastPeopleCount(TouristDock[] docks) {
-        TouristDock min = docks[0];
-
-        for (TouristDock d : docks) {
-            if (d.getCurrentPeopleCount() <= min.getCurrentPeopleCount())
-                min = d;
-        }
-
+    public static void printNameLeastPeopleCount(List<TouristDock> docks) {
+        TouristDock min = Collections.min(docks, new Comparator<TouristDock>() {
+            @Override
+            public int compare(TouristDock o1, TouristDock o2) {
+                return o1.getCurrentPeopleCount() - o2.getCurrentPeopleCount();
+            }
+        });
         System.out.println("Name: " + min.getPlacement());
     }
 
-    public static void printByMaxPeopleCountAscending(TouristDock[] docks) {
-        TouristDock[] tempDocks = Arrays.copyOf(docks, docks.length);
-        boolean isSorted = false;
-        int count = 0;
-
-        while (!isSorted) {
-            isSorted = true;
-
-            for (int i = 0; i < tempDocks.length - 1 - count; i++) {
-                if (tempDocks[i].getMaxPeopleCount() >= tempDocks[i + 1].getMaxPeopleCount()) {
-                    var temp = tempDocks[i];
-                    tempDocks[i] = tempDocks[i + 1];
-                    tempDocks[i + 1] = temp;
-
-                    isSorted = false;
-                }
+    public static void printByMaxPeopleCountAscending(List<TouristDock> docks) {
+        List<TouristDock> docksCopy = new ArrayList<>(docks.size());
+        Collections.copy(docksCopy, docks);
+        docksCopy.sort(new Comparator<TouristDock>() {
+            @Override
+            public int compare(TouristDock o1, TouristDock o2) {
+                return o1.getMaxPeopleCount() - o2.getMaxPeopleCount();
             }
-            count++;
-        }
+        });
 
-        for (TouristDock d : tempDocks) {
+        for (TouristDock d : docksCopy) {
             printTouristDock(d);
         }
     }

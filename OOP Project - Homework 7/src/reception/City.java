@@ -36,7 +36,7 @@ public enum City {
     public static ArrayList<City> printPlaces(City... exclusions) {
         StringBuilder sb = new StringBuilder();
         List<City> exclusionsList = new ArrayList<>(Arrays.asList(exclusions));
-        Set<City> citiesToReturn = new HashSet<>(City.values().length - exclusionsList.size());
+        Set<City> citiesToReturn = new LinkedHashSet<>(City.values().length - exclusionsList.size());
         int i = 1;
 
         City[] places = City.values();

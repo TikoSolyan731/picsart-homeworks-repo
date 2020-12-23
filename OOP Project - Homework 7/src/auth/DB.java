@@ -31,10 +31,10 @@ public class DB {
     }
 
     private static class User {
-        String fullName;
-        String username;
-        String email;
-        String password;
+        private String fullName;
+        private String username;
+        private String email;
+        private String password;
 
         public User(String fullName, String username, String email, String password) {
             this.fullName = fullName;

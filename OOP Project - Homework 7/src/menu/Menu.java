@@ -12,9 +12,11 @@ import services.waterTransportServices.CruiserService;
 import services.waterTransportServices.ShipService;
 import transport.waterTransport.CargoShip;
 import transport.waterTransport.Cruiser;
+import transport.waterTransport.Ship;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
@@ -22,76 +24,6 @@ public class Menu {
 
     static {
         db = DB.getInstance();
-    }
-
-    private static void validation() throws IOException {
-        Scanner sc = new Scanner(System.in);
-        boolean hasLoginned = false;
-
-        while (!hasLoginned) {
-            System.out.println("Login Or Register\n1.Login\t2.Register");
-
-            int n = sc.nextInt();
-            switch (n) {
-                case 1:
-                    System.out.println("Enter these fields");
-                    System.out.print("Username - ");
-
-                    sc.nextLine();
-
-                    String loginUsername = sc.next();
-                    System.out.print("Password - ");
-                    String loginPassword = sc.next();
-
-                    if(db.login(loginUsername, loginPassword)) {
-                        System.out.println("Login Successful!");
-                        hasLoginned = true;
-                    } else
-                        System.out.println("The User Does Not Exist.");
-
-                    break;
-                case 2:
-                    System.out.println("Enter these fields");
-                    System.out.print("Full Name (Name Surname) - ");
-
-                    sc.nextLine();
-                    String fullName = sc.nextLine();
-                    while (!db.validateName(fullName)) {
-                        System.out.println("You Entered Full Name Incorrectly!");
-                        System.out.print("Full Name (Name Surname) - ");
-                        fullName = sc.nextLine();
-                    }
-                    System.out.print("Username (More Than 10 Characters) - ");
-
-                    String username = sc.next();
-                    while (!db.validateUsername(username)) {
-                        System.out.print("Username (More Than 10 Characters) - ");
-                        username = sc.next();
-                    }
-                    System.out.print("Email - ");
-
-                    String email = sc.next();
-                    while (!db.validateEmail(email)) {
-                        System.out.println("Your Input Is Not An Email!");
-                        System.out.print("Email - ");
-                        email = sc.next();
-                    }
-                    System.out.print("Password (More Than 8 Characters, 2 Uppercase, 3 Numbers) - ");
-
-                    String password = sc.next();
-                    while (!db.validatePassword(password)) {
-                        System.out.println("You Entered Password Incorrectly!");
-                        System.out.print("Password (More Than 8 Characters, 2 Uppercase, 3 Numbers) - ");
-                        password = sc.next();
-                    }
-
-                    if (!db.register(fullName, username, email, password))
-                        System.out.println("Could Not Register");
-                    else
-                        System.out.println("Registered Successfully!");
-                    break;
-            }
-        }
     }
 
     public static void start() throws IOException {
@@ -147,20 +79,16 @@ public class Menu {
                                 while (isMethodsMenuActive && !goBack) {
                                     System.out.println("Choose a function\n-------- SERVICES --------\n1.Print A Cargo Ship\n2.Print The Name Of The Cargo Ship With The Biggest Current Cargo Weight\n" +
                                             "3.Print The Ship With The Least Cargo Weight\n4.Write The Ship To A File\n5.Create A New Cargo Ship\n-------- CONTROLS --------\n6.Move A Ship To A New City\n7.Transport Cargo To A City\n" +
-                                            "8.Take Cargo Onto The Ship From Its Dock\n9.Empty A Ship's Cargo Into Its Dock\n10.Dump A Ship's Cargo Into The Ocean\n11.Go Back");
+                                            "8.Take Cargo Onto The Ship From Its Dock\n9.Empty A Ship's Cargo Into Its Dock\n10.Dump A Ship's Cargo Into The Ocean\n-------- UPGRADES --------\n11.Upgrade A Ship\n12.Go Back");
                                     int funcNum = scanner.nextInt();
 
                                     switch (funcNum) {
                                         case 1:
-                                            System.out.println("Choose an object.");
-                                            ShipService.printShips(cargoShips);
-
-                                            int objNum = scanner.nextInt();
-
-                                            if (objNum == cargoShips.size() + 1)
+                                            Ship chooseShip = chooseShip(cargoShips, "Choose an object.");
+                                            if (chooseShip == null)
                                                 break;
 
-                                            CargoShipService.printCargoShip(cargoShips.get(objNum - 1));
+                                            CargoShipService.printCargoShip((CargoShip) chooseShip);
                                             break;
                                         case 2:
                                             System.out.println("Choose objects for the array like this (1 2 3 ...)");
@@ -174,9 +102,9 @@ public class Menu {
                                             }
                                             String[] numsStr = line.split(" ");
 
-                                            CargoShip[] cargoShips1 = new CargoShip[numsStr.length];
-                                            for (int i = 0; i < numsStr.length; i++)
-                                                cargoShips1[i] = cargoShips.get(Integer.parseInt(numsStr[i]) - 1);
+                                            List<CargoShip> cargoShips1 = new ArrayList<>(numsStr.length);
+                                            for (String s : numsStr)
+                                                cargoShips1.add(cargoShips.get(Integer.parseInt(s) - 1));
 
                                             CargoShipService.printNameBiggestMaxCargo(cargoShips1);
                                             break;
@@ -192,24 +120,21 @@ public class Menu {
                                             }
                                             numsStr = line.split(" ");
 
-                                            cargoShips1 = new CargoShip[numsStr.length];
-                                            for (int i = 0; i < numsStr.length; i++)
-                                                cargoShips1[i] = cargoShips.get(Integer.parseInt(numsStr[i]) - 1);
+                                            cargoShips1 = new ArrayList<>(numsStr.length);
+                                            for (String s : numsStr)
+                                                cargoShips1.add(cargoShips.get(Integer.parseInt(s) - 1));
 
                                             CargoShipService.printLowestCargo(cargoShips1);
                                             break;
                                         case 4:
-                                            System.out.println("Choose an object.");
-                                            ShipService.printShips(cargoShips);
-                                            objNum = scanner.nextInt();
-
-                                            if (objNum == cargoShips.size() + 1)
+                                            chooseShip = chooseShip(cargoShips, "Choose an object.");
+                                            if (chooseShip == null)
                                                 break;
 
                                             System.out.println("Write the path to the file.");
                                             String path = scanner.next();
 
-                                            CargoShipService.writeToFile(cargoShips.get(objNum - 1), path);
+                                            CargoShipService.writeToFile((CargoShip) chooseShip, path);
                                             break;
                                         case 5:
                                             CargoShip cargoShip = CargoShipService.createCargoShip();
@@ -217,16 +142,12 @@ public class Menu {
                                             cargoShips.add(cargoShip);
                                             break;
                                         case 6:
-                                            System.out.println("Choose The Ship You Want To Move:");
-                                            ShipService.printShips(cargoShips);
-                                            objNum = scanner.nextInt();
-                                            if (objNum == cargoShips.size() + 1)
+                                            CargoShip toMove = (CargoShip) chooseShip(cargoShips, "Choose The Ship You Want To Move:");
+                                            if (toMove == null)
                                                 break;
 
-                                            CargoShip toMove = cargoShips.get(objNum - 1);
-
                                             System.out.println("Choose The City You Want To Move The Ship To:");
-                                            ArrayList<City> presentCities = City.printPlaces(toMove.getCurrentPos().getPlacement());
+                                            List<City> presentCities = City.printPlaces(toMove.getCurrentPos().getPlacement());
                                             int placeNum = scanner.nextInt();
                                             if (placeNum == presentCities.size() + 1)
                                                 break;
@@ -238,17 +159,17 @@ public class Menu {
                                             if (dockNum == j)
                                                 break;
 
-                                            toMove.moveTo(city.getReceptions().get(dockNum - 1));
+                                            if (city.getReceptions().get(dockNum - 1) != null)
+                                                toMove.moveTo(city.getReceptions().get(dockNum - 1));
+                                            else
+                                                toMove.moveTo(city.getReceptions().get(dockNum));
                                             System.out.println("The Ship " + toMove.getName() + " Has Moved To The City Of " + city + ".");
                                             break;
                                         case 7:
-                                            System.out.println("Choose The Ship You Want To Transport Cargo With:");
-                                            ShipService.printShips(cargoShips);
-                                            objNum = scanner.nextInt();
-                                            if (objNum == cargoShips.size() + 1)
-                                                break;
+                                            CargoShip toTransport = (CargoShip) chooseShip(cargoShips, "Choose The Ship You Want To Transport Cargo With:");
 
-                                            CargoShip toTransport = cargoShips.get(objNum - 1);
+                                            if (toTransport == null)
+                                                break;
 
                                             System.out.println("Choose The City You Want To Move The Ship To:");
                                             ArrayList<City> cargoDocksPlaces = DockService.printCargoDocks();
@@ -266,13 +187,9 @@ public class Menu {
                                                 System.out.println("The Ship " + toTransport.getName() + " Has Transported " + weight + " Cargo To The City Of " + city + ".");
                                             break;
                                         case 8:
-                                            System.out.println("Choose The Ship You Want To Load With Cargo:");
-                                            ShipService.printShips(cargoShips);
-                                            objNum = scanner.nextInt();
-                                            if (objNum == cargoShips.size() + 1)
+                                            CargoShip ship = (CargoShip) chooseShip(cargoShips, "Choose The Ship You Want To Load With Cargo:");
+                                            if (ship == null)
                                                 break;
-
-                                            CargoShip ship = cargoShips.get(objNum - 1);
 
                                             maxWeight = Math.min((ship.getMaxCargoWeight() - ship.getCargoWeight()), ((CargoDock) ship.getCurrentPos()).getCurrentCargoWeight());
 
@@ -283,31 +200,33 @@ public class Menu {
                                                 System.out.println("The Ship " + ship.getName() + " Has Taken " + weight + " Cargo Onto Its Board.");
                                             break;
                                         case 9:
-                                            System.out.println("Choose The Ship You Want To Empty:");
-                                            ShipService.printShips(cargoShips);
-                                            objNum = scanner.nextInt();
-                                            if (objNum == cargoShips.size() + 1)
+                                            ship = (CargoShip) chooseShip(cargoShips, "Choose The Ship You Want To Empty:");
+                                            if (ship == null)
                                                 break;
 
-                                            ship = cargoShips.get(objNum - 1);
                                             double temp = ship.emptyToCurrentPos();
                                             if (temp > 0)
                                                 System.out.println("The Ship " + ship.getName() + " Has Emptied " + temp + " Cargo Into Its Dock.");
                                             break;
                                         case 10:
-                                            System.out.println("Choose The Ship You Want To Empty:");
-                                            ShipService.printShips(cargoShips);
-                                            objNum = scanner.nextInt();
-                                            if (objNum == cargoShips.size() + 1)
+                                            ship = (CargoShip) chooseShip(cargoShips, "Choose The Ship You Want To Empty:");
+                                            if (ship == null)
                                                 break;
-
-                                            ship = cargoShips.get(objNum - 1);
 
                                             temp = ship.dump();
                                             if (temp > 0)
                                                 System.out.println("The Ship " + ship.getName() + " Has Dumped " + temp + " Cargo Into The Ocean.");
                                             break;
                                         case 11:
+                                            ship = (CargoShip) chooseShip(cargoShips, "Choose The Ship You Want To Upgrade:");
+                                            if (ship == null)
+                                                break;
+
+                                            ship.upgrade();
+                                            System.out.println("The Ship " + ship.getName() + " Has Been Upgraded:");
+                                            CargoShipService.printCargoShip(ship);
+                                            break;
+                                        case 12:
                                             System.out.println("Going Back.");
                                             isMethodsMenuActive = false;
                                             break;
@@ -349,20 +268,16 @@ public class Menu {
                                 while (isMethodsMenuActive && !goBack) {
                                     System.out.println("Choose a function\n-------- SERVICES --------\n1.Print A Cruiser\n2.Print The Ships In Ascending Order By Ticket Cost\n" +
                                             "3.Print The Ship With The Least Number Of Passengers\n4.Write The Ship To A File\n5.Create A New Cruiser\n" +
-                                            "-------- CONTROLS --------\n6.Move A Ship To A New City\n7.Transport People To A City\n.Go Back");
+                                            "-------- CONTROLS --------\n6.Move A Ship To A New City\n7.Transport People To A City\n-------- CONTROLS --------\n8.Upgrade A Ship\n9.Go Back");
                                     int funcNum = scanner.nextInt();
 
                                     switch (funcNum) {
                                         case 1:
-                                            System.out.println("Choose an object.");
-                                            ShipService.printShips(cruisers);
-
-                                            int objNum = scanner.nextInt();
-
-                                            if (objNum == cruisers.size() + 1)
+                                            Ship ship = chooseShip(cruisers, "Choose An Object");
+                                            if (ship == null)
                                                 break;
 
-                                            CruiserService.printCruiser(cruisers.get(objNum - 1));
+                                            CruiserService.printCruiser((Cruiser) ship);
                                             break;
                                         case 2:
                                             System.out.println("Choose objects for the array like this (1 2 3 ...)");
@@ -376,9 +291,9 @@ public class Menu {
                                             }
                                             String[] numsStr = line.split(" ");
 
-                                            Cruiser[] cruisers1 = new Cruiser[numsStr.length];
-                                            for (int i = 0; i < numsStr.length; i++)
-                                                cruisers1[i] = cruisers.get(Integer.parseInt(numsStr[i]) - 1);
+                                            List<Cruiser> cruisers1 = new ArrayList<>(numsStr.length);
+                                            for (String s : numsStr)
+                                                cruisers1.add(cruisers.get(Integer.parseInt(s) - 1));
 
                                             CruiserService.printTicketCostAscending(cruisers1);
                                             break;
@@ -394,24 +309,21 @@ public class Menu {
                                             }
                                             numsStr = line.split(" ");
 
-                                            cruisers1 = new Cruiser[numsStr.length];
-                                            for (int i = 0; i < numsStr.length; i++)
-                                                cruisers1[i] = cruisers.get(Integer.parseInt(numsStr[i]) - 1);
+                                            cruisers1 = new ArrayList<>(numsStr.length);
+                                            for (String s : numsStr)
+                                                cruisers1.add(cruisers.get(Integer.parseInt(s) - 1));
 
                                             CruiserService.printLeastPassengerCount(cruisers1);
                                             break;
                                         case 4:
-                                            System.out.println("Choose an object.");
-                                            ShipService.printShips(cruisers);
-                                            objNum = scanner.nextInt();
-
-                                            if (objNum == cruisers.size() + 1)
+                                            ship = chooseShip(cruisers, "Choose an object");
+                                            if (ship == null)
                                                 break;
 
                                             System.out.println("Write the path to the file.");
                                             String path = scanner.next();
 
-                                            CruiserService.writeToFile(cruisers.get(objNum - 1), path);
+                                            CruiserService.writeToFile((Cruiser) ship, path);
                                             break;
                                         case 5:
                                             Cruiser cruiser = CruiserService.createCruiser();
@@ -419,13 +331,9 @@ public class Menu {
                                             cruisers.add(cruiser);
                                             break;
                                         case 6:
-                                            System.out.println("Choose The Ship You Want To Move:");
-                                            ShipService.printShips(cruisers);
-                                            objNum = scanner.nextInt();
-                                            if (objNum == cargoShips.size() + 1)
+                                            Cruiser toMove = (Cruiser) chooseShip(cruisers, "Choose The Ship You Want To Move:");
+                                            if (toMove == null)
                                                 break;
-
-                                            Cruiser toMove = cruisers.get(objNum - 1);
 
                                             System.out.println("Choose The City You Want To Move The Ship To:");
                                             ArrayList<City> presentCities = City.printPlaces(toMove.getCurrentPos().getPlacement());
@@ -440,17 +348,16 @@ public class Menu {
                                             if (dockNum == j)
                                                 break;
 
-                                            toMove.moveTo(city.getReceptions().get(dockNum - 1));
+                                            if (city.getReceptions().get(dockNum - 1) != null)
+                                                toMove.moveTo(city.getReceptions().get(dockNum - 1));
+                                            else
+                                                toMove.moveTo(city.getReceptions().get(dockNum));
                                             System.out.println("The Ship " + toMove.getName() + " Has Moved To The City Of " + city + ".");
                                             break;
                                         case 7:
-                                            System.out.println("Choose The Ship You Want To Transport People With:");
-                                            ShipService.printShips(cruisers);
-                                            objNum = scanner.nextInt();
-                                            if (objNum == cargoShips.size() + 1)
+                                            Cruiser toTransport = (Cruiser) chooseShip(cruisers, "Choose The Ship You Want To Transport People With:");
+                                            if (toTransport == null)
                                                 break;
-
-                                            Cruiser toTransport = cruisers.get(objNum - 1);
 
                                             System.out.println("Choose The City You Want To Move The Ship To:");
                                             ArrayList<City> touristDocks = DockService.printTouristDocks();
@@ -468,6 +375,15 @@ public class Menu {
                                                 System.out.println("The Ship " + toTransport.getName() + " Has Transported " + people + " People To The City Of " + city + ".");
                                             break;
                                         case 8:
+                                            cruiser = (Cruiser) chooseShip(cruisers, "Choose The Ship You Want To Upgrade:");
+                                            if (cruiser == null)
+                                                break;
+
+                                            cruiser.upgrade();
+                                            System.out.println("The Ship " + cruiser.getName() + " Has Been Upgraded:");
+                                            CruiserService.printCruiser(cruiser);
+                                            break;
+                                        case 9:
                                             System.out.println("Going Back.");
                                             isMethodsMenuActive = false;
                                             break;
@@ -498,8 +414,8 @@ public class Menu {
                                 boolean isMethodsMenuActive = true;
 
                                 while (isMethodsMenuActive) {
-                                    System.out.println("Choose a function:\n1.printCargoDock\n2.printBiggestCargoWeight\n" +
-                                            "3.printDockedCargoShipBiggestMaxWeight\n4.writeToFile\n5.Go Back");
+                                    System.out.println("Choose a function:\n1.Print A Cargo Dock\n2.Print Cargo Dock With The Most Cargo Weight\n" +
+                                            "3.Print The Docked Cargo Ship With The Biggest Max Weight\n4.Write A Cargo Dock To File\n5.Go Back");
                                     int funcNum = scanner.nextInt();
 
                                     ArrayList<City> cargoDocks;
@@ -527,22 +443,22 @@ public class Menu {
                                             }
                                             String[] numsStr = line.split(" ");
 
-                                            ArrayList<CargoDock> cargoDocks1 = new ArrayList<>();
-                                            for (int i = 0; i < numsStr.length; i++)
-                                                cargoDocks1.add((CargoDock) cargoDocks.get(Integer.parseInt(numsStr[i]) - 1).getReceptions().get(0));
+                                            List<CargoDock> cargoDocks1 = new ArrayList<>();
+                                            for (String s : numsStr)
+                                                cargoDocks1.add((CargoDock) cargoDocks.get(Integer.parseInt(s) - 1).getReceptions().get(0));
 
                                             CargoDockService.printBiggestCargoWeight(cargoDocks1);
                                             break;
                                         case 3:
                                             System.out.println("Choose an object.");
-                                            cargoDocks = DockService.printCargoDocks();
+                                            List<City> cities = DockService.printCargoDocks();
 
                                             objNum = scanner.nextInt();
 
-                                            if (objNum == cargoDocks.size() + 1)
+                                            if (objNum == cities.size() + 1)
                                                 break;
 
-                                            CargoDockService.printDockedCargoShipBiggestMaxWeight((CargoDock) cargoDocks.get(objNum - 1).getReceptions().get(0));
+                                            CargoDockService.printDockedCargoShipBiggestMaxWeight((CargoDock) cities.get(objNum - 1).getReceptions().get(0));
                                             break;
                                         case 4:
                                             System.out.println("Choose an object.");
@@ -568,8 +484,8 @@ public class Menu {
                                 isMethodsMenuActive = true;
 
                                 while (isMethodsMenuActive) {
-                                    System.out.println("Choose a function:\n1.printTouristDock\n2.printNameLeastPeopleCount\n" +
-                                            "3.printByMaxPeopleCountAscending\n4.writeToFile\n5.Go Back");
+                                    System.out.println("Choose a function:\n1.Print A Tourist Dock\n2.Print The Name Of The Tourist Dock With The Least Number Of People\n" +
+                                            "3.Print Tourist Docks in Ascending Order By The Number Of Max People\n4.Write A Tourist Dock To File\n5.Go Back");
                                     int funcNum = scanner.nextInt();
 
                                     ArrayList<City> touristDocks;
@@ -597,9 +513,9 @@ public class Menu {
                                             }
                                             String[] numsStr = line.split(" ");
 
-                                            TouristDock[] touristDocks1 = new TouristDock[numsStr.length];
-                                            for (int i = 0; i < numsStr.length; i++)
-                                                touristDocks1[i] = (TouristDock) touristDocks.get(Integer.parseInt(numsStr[i]) - 1).getReceptions().get(1);
+                                            List<TouristDock> touristDocks1 = new ArrayList<>(numsStr.length);
+                                            for (String s : numsStr)
+                                                touristDocks1.add((TouristDock) touristDocks.get(Integer.parseInt(s) - 1).getReceptions().get(1));
 
                                             TouristDockService.printNameLeastPeopleCount(touristDocks1);
                                             break;
@@ -615,9 +531,9 @@ public class Menu {
                                             }
                                             numsStr = line.split(" ");
 
-                                            touristDocks1 = new TouristDock[numsStr.length];
-                                            for (int i = 0; i < numsStr.length; i++)
-                                                touristDocks1[i] = (TouristDock) touristDocks.get(Integer.parseInt(numsStr[i]) - 1).getReceptions().get(1);
+                                            touristDocks1 = new ArrayList<>(numsStr.length);
+                                            for (String s : numsStr)
+                                                touristDocks1.add((TouristDock) touristDocks.get(Integer.parseInt(s) - 1).getReceptions().get(1));
 
                                             TouristDockService.printByMaxPeopleCountAscending(touristDocks1);
                                             break;
@@ -657,5 +573,85 @@ public class Menu {
                     break;
             }
         }
+    }
+
+    private static void validation() throws IOException {
+        Scanner sc = new Scanner(System.in);
+        boolean hasLogon = false;
+
+        while (!hasLogon) {
+            System.out.println("Login Or Register\n1.Login\t2.Register");
+
+            int n = sc.nextInt();
+            switch (n) {
+                case 1:
+                    System.out.println("Enter these fields");
+                    System.out.print("Username - ");
+
+                    sc.nextLine();
+
+                    String loginUsername = sc.next();
+                    System.out.print("Password - ");
+                    String loginPassword = sc.next();
+
+                    if (db.login(loginUsername, loginPassword)) {
+                        System.out.println("Login Successful!");
+                        hasLogon = true;
+                    } else
+                        System.out.println("The User Does Not Exist.");
+
+                    break;
+                case 2:
+                    System.out.println("Enter these fields");
+                    System.out.print("Full Name (Name Surname) - ");
+
+                    sc.nextLine();
+                    String fullName = sc.nextLine();
+                    while (!db.validateName(fullName)) {
+                        System.out.println("You Entered Full Name Incorrectly!");
+                        System.out.print("Full Name (Name Surname) - ");
+                        fullName = sc.nextLine();
+                    }
+                    System.out.print("Username (More Than 10 Characters) - ");
+
+                    String username = sc.next();
+                    while (!db.validateUsername(username)) {
+                        System.out.print("Username (More Than 10 Characters) - ");
+                        username = sc.next();
+                    }
+                    System.out.print("Email - ");
+
+                    String email = sc.next();
+                    while (!db.validateEmail(email)) {
+                        System.out.println("Your Input Is Not An Email!");
+                        System.out.print("Email - ");
+                        email = sc.next();
+                    }
+                    System.out.print("Password (More Than 8 Characters, 2 Uppercase, 3 Numbers) - ");
+
+                    String password = sc.next();
+                    while (!db.validatePassword(password)) {
+                        System.out.println("You Entered Password Incorrectly!");
+                        System.out.print("Password (More Than 8 Characters, 2 Uppercase, 3 Numbers) - ");
+                        password = sc.next();
+                    }
+
+                    if (!db.register(fullName, username, email, password))
+                        System.out.println("Could Not Register");
+                    else
+                        System.out.println("Registered Successfully!");
+                    break;
+            }
+        }
+    }
+
+    private static Ship chooseShip(List<? extends Ship> ships, String text) {
+        System.out.println(text);
+        ShipService.printShips(ships);
+        int objNum = new Scanner(System.in).nextInt();
+        if (objNum == ships.size() + 1)
+            return null;
+
+        return ships.get(objNum - 1);
     }
 }

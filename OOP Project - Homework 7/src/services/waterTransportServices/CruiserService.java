@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
-import java.util.Formatter;
-import java.util.Scanner;
+import java.util.*;
 
 public class CruiserService {
     private static final String FILE_FORMAT = "%s,%s,%s,%d,%.1f,%d,%d,%.1f\n";
@@ -70,39 +68,28 @@ public class CruiserService {
         return cs;
     }
 
-    public static void printTicketCostAscending(Cruiser[] ships) {
-        Cruiser[] temp = Arrays.copyOf(ships, ships.length);
-
-        boolean isSorted = false;
-        int count = 0;
-
-        while (!isSorted) {
-            isSorted = true;
-
-            for (int i = 0; i < temp.length - 1 - count; i++) {
-                if (temp[i].getTicketCost() >= temp[i + 1].getTicketCost()) {
-                    Cruiser c = temp[i];
-                    temp[i] = temp[i + 1];
-                    temp[i + 1] = c;
-
-                    isSorted = false;
-                }
+    public static void printTicketCostAscending(List<Cruiser> ships) {
+        List<Cruiser> shipsCopy = new ArrayList<>(ships.size());
+        Collections.copy(shipsCopy, ships);
+        shipsCopy.sort(new Comparator<Cruiser>() {
+            @Override
+            public int compare(Cruiser o1, Cruiser o2) {
+                return (int) (o1.getTicketCost() - o2.getTicketCost());
             }
-            count++;
-        }
+        });
 
-        for (Cruiser c : temp) {
+        for (Cruiser c : shipsCopy) {
             printCruiser(c);
         }
     }
 
-    public static void printLeastPassengerCount(Cruiser[] ships) {
-        Cruiser min = ships[0];
-
-        for (Cruiser c : ships) {
-            if (c.getPassengerCount() <= min.getPassengerCount())
-                min = c;
-        }
+    public static void printLeastPassengerCount(List<Cruiser> ships) {
+        Cruiser min = Collections.min(ships, new Comparator<Cruiser>() {
+            @Override
+            public int compare(Cruiser o1, Cruiser o2) {
+                return o1.getPassengerCount() - o2.getPassengerCount();
+            }
+        });
 
         printCruiser(min);
     }

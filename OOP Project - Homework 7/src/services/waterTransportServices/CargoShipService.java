@@ -9,8 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Formatter;
-import java.util.Scanner;
+import java.util.*;
 
 public class CargoShipService {
     private static final String FILE_FORMAT = "%s,%s,%s,%d,%.1f,%.1f,%.1f\n";
@@ -68,24 +67,24 @@ public class CargoShipService {
         return cs;
     }
 
-    public static void printNameBiggestMaxCargo(CargoShip[] ships) {
-        CargoShip max = ships[0];
-
-        for (CargoShip sh : ships) {
-            if (sh.getMaxCargoWeight() >= max.getMaxCargoWeight())
-                max = sh;
-        }
+    public static void printNameBiggestMaxCargo(List<CargoShip> ships) {
+        CargoShip max = Collections.max(ships, new Comparator<CargoShip>() {
+            @Override
+            public int compare(CargoShip o1, CargoShip o2) {
+                return (int) (o1.getMaxCargoWeight() - o2.getMaxCargoWeight());
+            }
+        });
 
         System.out.println(max.getName());
     }
 
-    public static void printLowestCargo(CargoShip[] ships) {
-        CargoShip min = ships[0];
-
-        for (CargoShip sh : ships) {
-            if (sh.getCargoWeight() <= min.getCargoWeight())
-                min = sh;
-        }
+    public static void printLowestCargo(List<CargoShip> ships) {
+        CargoShip min = Collections.min(ships, new Comparator<CargoShip>() {
+            @Override
+            public int compare(CargoShip o1, CargoShip o2) {
+                return (int) (o1.getCargoWeight() - o2.getCargoWeight());
+            }
+        });
 
         printCargoShip(min);
     }

@@ -3,9 +3,10 @@ package services.waterTransportServices;
 import transport.waterTransport.Ship;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ShipService {
-    public static void printShips(ArrayList<? extends Ship> list) {
+    public static void printShips(List<? extends Ship> list) {
         StringBuilder sb = new StringBuilder();
         var iter = list.iterator();
         int i = 1;

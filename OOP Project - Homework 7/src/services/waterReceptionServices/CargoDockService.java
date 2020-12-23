@@ -1,7 +1,6 @@
 package services.waterReceptionServices;
 
 import reception.waterReception.CargoDock;
-import services.waterReceptionServices.comparators.CargoWeightComparator;
 import services.waterTransportServices.CargoShipService;
 import transport.waterTransport.CargoShip;
 import transport.waterTransport.Ship;
@@ -10,9 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Formatter;
+import java.util.*;
 
 public class CargoDockService {
     private static final String FILE_FORMAT = "%s,%d,%d,%.1f\n";
@@ -28,53 +25,38 @@ public class CargoDockService {
         }
     }
 
-//    public static CargoDock createCargoDock() {
-//        Scanner sc = new Scanner(System.in);
-//
-//        System.out.print("Dock Name: ");
-//        String name = sc.nextLine();
-//        System.out.print("Max Docked Ships: ");
-//        int count = sc.nextInt();
-//        CargoDock cd = new CargoDock(name, count);
-//
-//        System.out.print("Current Cargo Weight: ");
-//        cd.setCurrentCargoWeight(sc.nextDouble());
-//        System.out.println("Done!");
-//
-//        return cd;
-//    }
-
-    public static void printBiggestCargoWeight(Collection<CargoDock> docks) {
-        CargoDock max = Collections.max(docks, new CargoWeightComparator());
+    public static void printBiggestCargoWeight(List<CargoDock> docks) {
+        CargoDock max = Collections.max(docks, new Comparator<CargoDock>() {
+            @Override
+            public int compare(CargoDock o1, CargoDock o2) {
+                return (int) (o1.getCurrentCargoWeight() - o2.getCurrentCargoWeight());
+            }
+        });
 
         printCargoDock(max);
     }
 
     public static void printDockedCargoShipBiggestMaxWeight(CargoDock dock) {
-        Ship max = (dock.getDockedShips().length == 0) ? null : dock.getDockedShips()[0];
-        CargoShip cargoMax = null;
+        List<Ship> dockedShips = new ArrayList<>(Arrays.asList(dock.getDockedShips()));
+        List<CargoShip> dockedCargoShips = new ArrayList<>();
 
-        if (max == null) {
+        if (dockedShips.isEmpty()) {
             System.out.println("No Ships in this dock.");
             return;
         }
 
         for (Ship ship : dock.getDockedShips())
             if (ship instanceof CargoShip)
-                cargoMax = (CargoShip) ship;
+                dockedCargoShips.add((CargoShip) ship);
 
-        if (cargoMax == null) {
-            System.out.println("No Cargo Ships in this dock.");
-            return;
-        }
+        CargoShip max = Collections.max(dockedCargoShips, new Comparator<CargoShip>() {
+            @Override
+            public int compare(CargoShip o1, CargoShip o2) {
+                return (int) (o1.getMaxCargoWeight() - o2.getMaxCargoWeight());
+            }
+        });
 
-        for (Ship ship : dock.getDockedShips()) {
-            if (ship instanceof CargoShip)
-                if (((CargoShip) ship).getMaxCargoWeight() >= cargoMax.getMaxCargoWeight())
-                    cargoMax = (CargoShip) ship;
-        }
-
-        CargoShipService.printCargoShip(cargoMax);
+        CargoShipService.printCargoShip(max);
     }
 
     public static void writeToFile(CargoDock dock, String path) {
