@@ -5,6 +5,7 @@ import reception.waterReception.CargoDock;
 import transport.waterTransport.CargoShip;
 import utils.Utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -92,6 +93,16 @@ public class CargoShipService {
     public static void writeToFile(CargoShip ship, String path) {
         String info = FORMATTER.format(FILE_FORMAT, ship.getName(), ship.getCurrentPos().getPlacement(),
                 ship.getCaptain(), ship.getCrewMembersCount(), ship.getMaxSpeed(), ship.getCargoWeight(), ship.getMaxCargoWeight()).toString();
+        File file = new File(String.valueOf(Paths.get(path)));
+
+        if (!file.exists()) {
+            try {
+                Files.createFile(Paths.get(path));
+            } catch (IOException e) {
+                System.out.println("Could Not Create A File");
+                return;
+            }
+        }
 
         try {
             System.out.println("Writing " + ship.getName() + " to the file.");

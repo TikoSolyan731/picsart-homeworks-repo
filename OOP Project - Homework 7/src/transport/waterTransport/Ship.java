@@ -7,8 +7,8 @@ import transport.Transport;
 
 public abstract class Ship implements Transport {
     private Dock currentPos;
-    private String name = "";
-    private String captain = "";
+    private String name;
+    private String captain;
     private double maxSpeed = 55;
     private int crewMembersCount = 25;
 

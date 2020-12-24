@@ -27,7 +27,7 @@ public class Menu {
     }
 
     public static void start() throws IOException {
-        validation();
+        authorization();
 
         Scanner scanner = new Scanner(System.in);
 
@@ -127,11 +127,11 @@ public class Menu {
                                             CargoShipService.printLowestCargo(cargoShips1);
                                             break;
                                         case 4:
-                                            chooseShip = chooseShip(cargoShips, "Choose an object.");
+                                            chooseShip = chooseShip(cargoShips, "Choose A Ship To Write");
                                             if (chooseShip == null)
                                                 break;
 
-                                            System.out.println("Write the path to the file.");
+                                            System.out.println("Write the path to the file. If It Doesn't Exist, We Will Create It For You");
                                             String path = scanner.next();
 
                                             CargoShipService.writeToFile((CargoShip) chooseShip, path);
@@ -575,11 +575,11 @@ public class Menu {
         }
     }
 
-    private static void validation() throws IOException {
+    private static void authorization() throws IOException {
         Scanner sc = new Scanner(System.in);
-        boolean hasLogon = false;
+        boolean hasLogOn = false;
 
-        while (!hasLogon) {
+        while (!hasLogOn) {
             System.out.println("Login Or Register\n1.Login\t2.Register");
 
             int n = sc.nextInt();
@@ -596,7 +596,7 @@ public class Menu {
 
                     if (db.login(loginUsername, loginPassword)) {
                         System.out.println("Login Successful!");
-                        hasLogon = true;
+                        hasLogOn = true;
                     } else
                         System.out.println("The User Does Not Exist.");
 

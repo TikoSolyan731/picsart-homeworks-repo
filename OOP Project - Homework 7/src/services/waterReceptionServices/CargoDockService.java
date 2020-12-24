@@ -5,6 +5,7 @@ import services.waterTransportServices.CargoShipService;
 import transport.waterTransport.CargoShip;
 import transport.waterTransport.Ship;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -40,14 +41,18 @@ public class CargoDockService {
         List<Ship> dockedShips = new ArrayList<>(Arrays.asList(dock.getDockedShips()));
         List<CargoShip> dockedCargoShips = new ArrayList<>();
 
-        if (dockedShips.isEmpty()) {
+        int count = 0;
+        for (Ship ship : dockedShips) {
+            if (ship == null)
+                count++;
+            else if (ship instanceof CargoShip)
+                dockedCargoShips.add((CargoShip) ship);
+        }
+
+        if (count == dockedShips.size()) {
             System.out.println("No Ships in this dock.");
             return;
         }
-
-        for (Ship ship : dock.getDockedShips())
-            if (ship instanceof CargoShip)
-                dockedCargoShips.add((CargoShip) ship);
 
         CargoShip max = Collections.max(dockedCargoShips, new Comparator<CargoShip>() {
             @Override
@@ -63,8 +68,19 @@ public class CargoDockService {
         String info = FORMATTER.format(FILE_FORMAT, dock.getPlacement(), dock.getDockedShipsCount(),
                 dock.getMaxDockedShips(), dock.getCurrentCargoWeight()).toString();
 
+        File file = new File(String.valueOf(Paths.get(path)));
+
+        if (!file.exists()) {
+            try {
+                Files.createFile(Paths.get(path));
+            } catch (IOException e) {
+                System.out.println("Could Not Create A File");
+                return;
+            }
+        }
+
         try {
-            System.out.println("Writing " + dock.getPlacement() + " to the file.");
+            System.out.println("Writing The Cargo Dock At " + dock.getPlacement() + " to the file.");
             Files.write(Paths.get(path), info.getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {
             System.out.println("IOException: " + e);

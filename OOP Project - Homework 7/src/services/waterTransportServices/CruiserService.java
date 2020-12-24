@@ -5,6 +5,7 @@ import reception.waterReception.TouristDock;
 import transport.waterTransport.Cruiser;
 import utils.Utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -99,6 +100,17 @@ public class CruiserService {
                 ship.getCaptain(), ship.getCrewMembersCount(), ship.getMaxSpeed(),
                 ship.getPassengerCount(), ship.getMaxPassengerCount(),
                 ship.getTicketCost()).toString();
+
+        File file = new File(String.valueOf(Paths.get(path)));
+
+        if (!file.exists()) {
+            try {
+                Files.createFile(Paths.get(path));
+            } catch (IOException e) {
+                System.out.println("Could Not Create A File");
+                return;
+            }
+        }
 
         try {
             System.out.println("Writing " + ship.getName() + " to the file.");
