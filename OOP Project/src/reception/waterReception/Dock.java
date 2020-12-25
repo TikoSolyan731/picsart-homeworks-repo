@@ -26,7 +26,7 @@ public abstract class Dock extends AbstractReception {
         dockedShips = temp;
     }
 
-    public abstract void dockShip(Ship ship);
+    public abstract boolean dockShip(Ship ship);
 
     public abstract void undockShip(Ship ship);
 

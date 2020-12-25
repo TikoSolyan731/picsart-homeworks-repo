@@ -48,18 +48,18 @@ public class TouristDock extends Dock implements TouristReception {
     }
 
     @Override
-    public void dockShip(Ship ship) {
-        //System.out.println("Docking a ship at Tourist Dock " + getName() + ".");
+    public boolean dockShip(Ship ship) {
         for (int i = 0; i < getDockedShips().length; i++) {
             if (getDockedShips()[i] != null)
                 continue;
 
             getDockedShips()[i] = ship;
             setDockedShipsCount(getDockedShipsCount() + 1);
-            return;
+            return true;
         }
 
         System.out.println("The Tourist Dock is full.");
+        return false;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package auth;
 
+import utils.Utils;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Files;
@@ -7,7 +9,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,14 +19,16 @@ import java.util.regex.Pattern;
 public class DB {
     private static DB instance;
     private static final String dbPath;
+    private static final HashMap<String, User> userCache;
 
     static {
         dbPath = "src/auth/database.txt";
+        userCache = new HashMap<>();
     }
 
-    private DB() {
-    }
+    private DB() { }
 
+    // No need for a thread-safe singleton, as there are no multiple thread use cases in this program
     public static DB getInstance() {
         if (instance == null)
             instance = new DB();
@@ -47,6 +53,19 @@ public class DB {
             this.username = username;
             this.password = password;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            User user = (User) o;
+            return Objects.equals(username, user.username) && Objects.equals(password, user.password);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(username, password);
+        }
     }
 
     private static class UserService {
@@ -55,13 +74,19 @@ public class DB {
 
             sj.add(user.fullName).add(user.username).add(user.email).add(user.password);
             Files.write(Paths.get(dbPath), (sj.toString() + '\n').getBytes(), StandardOpenOption.APPEND);
+
+            userCache.put(user.username, user);
         }
 
         public static boolean checkUser(User user) throws IOException {
+            if (userCache.containsValue(user))
+                return true;
+
             List<String> data = Files.readAllLines(Paths.get(dbPath));
 
             for (String line : data) {
                 String[] info = line.split("\\|");
+                userCache.put(info[1], new User(info[0], info[1], info[2], info[3]));
                 if (user.username.equals(info[1]) && user.password.equals(info[3]))
                     return true;
             }
@@ -82,6 +107,12 @@ public class DB {
         Matcher matcher = pattern.matcher(username);
 
         if (matcher.matches()) {
+            if (userCache.containsKey(username)) {
+                System.out.println("This Username Already Exists");
+                return false;
+            }
+
+            // In case if the database file is manually edited
             List<String> data = Files.readAllLines(Paths.get(dbPath));
 
             for (String line : data) {
@@ -112,7 +143,7 @@ public class DB {
     }
 
     public boolean register(String fullName, String username, String email, String password) {
-        User newUser = new User(fullName, username, email, md5(password));
+        User newUser = new User(fullName, username, email, Utils.md5(password));
 
         try {
             UserService.saveUser(newUser);
@@ -124,25 +155,8 @@ public class DB {
     }
 
     public boolean login(String username, String password) throws IOException {
-        User user = new User(username, md5(password));
+        User user = new User(username, Utils.md5(password));
 
         return UserService.checkUser(user);
-    }
-
-    private static String md5(String input) {
-        String md5 = null;
-        if(null == input) return null;
-        try {
-            //Create MessageDigest object for MD5
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            //Update input string in message digest
-            digest.update(input.getBytes(), 0, input.length());
-            //Converts message digest value in base 16 (hex)
-            md5 = new BigInteger(1, digest.digest()).toString(16);
-        }
-        catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return md5;
     }
 }

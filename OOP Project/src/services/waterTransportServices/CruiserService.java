@@ -13,7 +13,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 public class CruiserService {
-    private static final String FILE_FORMAT = "%s,%s,%s,%d,%.1f,%d,%d,%.1f\n";
+    private static final String FILE_FORMAT = "%s,%s,%s,%.1f,%d,%d,%.1f\n";
     private static final Formatter FORMATTER = new Formatter();
 
     public static void printCruiser(Cruiser ship) {
@@ -57,8 +57,6 @@ public class CruiserService {
         cs.setCaptain(sc.nextLine());
         System.out.print("Max Speed: ");
         cs.setMaxSpeed(sc.nextDouble());
-        System.out.print("Crew Member Count: ");
-        cs.setCrewMembersCount(sc.nextInt());
         System.out.print("Passenger Count: ");
         cs.setPassengerCount(sc.nextInt());
         System.out.print("Max Passenger Count: ");
@@ -97,7 +95,7 @@ public class CruiserService {
 
     public static void writeToFile(Cruiser ship, String path) {
         String info = FORMATTER.format(FILE_FORMAT, ship.getName(), ship.getCurrentPos().getPlacement(),
-                ship.getCaptain(), ship.getCrewMembersCount(), ship.getMaxSpeed(),
+                ship.getCaptain(), ship.getMaxSpeed(),
                 ship.getPassengerCount(), ship.getMaxPassengerCount(),
                 ship.getTicketCost()).toString();
 

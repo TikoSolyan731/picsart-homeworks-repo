@@ -19,17 +19,18 @@ public class CargoDock extends Dock implements CargoReception {
     }
 
     @Override
-    public void dockShip(Ship ship) {
+    public boolean dockShip(Ship ship) {
         for (int i = 0; i < getDockedShips().length; i++) {
             if (getDockedShips()[i] != null)
                 continue;
 
             getDockedShips()[i] = ship;
             setDockedShipsCount(getDockedShipsCount() + 1);
-            return;
+            return true;
         }
 
         System.out.println("The Cargo Dock is full.");
+        return false;
     }
 
     @Override

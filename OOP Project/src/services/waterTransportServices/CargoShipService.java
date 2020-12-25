@@ -13,7 +13,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 public class CargoShipService {
-    private static final String FILE_FORMAT = "%s,%s,%s,%d,%.1f,%.1f,%.1f\n";
+    private static final String FILE_FORMAT = "%s,%s,%s,%.1f,%.1f,%.1f\n";
     private static final Formatter FORMATTER = new Formatter();
 
     public static void printCargoShip(CargoShip ship) {
@@ -58,8 +58,6 @@ public class CargoShipService {
         cs.setCaptain(sc.nextLine());
         System.out.print("Max Speed: ");
         cs.setMaxSpeed(sc.nextDouble());
-        System.out.print("Crew Member Count: ");
-        cs.setCrewMembersCount(sc.nextInt());
         System.out.print("Cargo Weight: ");
         cs.setCargoWeight(sc.nextDouble());
         System.out.print("Max Cargo Weight: ");
@@ -92,7 +90,7 @@ public class CargoShipService {
 
     public static void writeToFile(CargoShip ship, String path) {
         String info = FORMATTER.format(FILE_FORMAT, ship.getName(), ship.getCurrentPos().getPlacement(),
-                ship.getCaptain(), ship.getCrewMembersCount(), ship.getMaxSpeed(), ship.getCargoWeight(), ship.getMaxCargoWeight()).toString();
+                ship.getCaptain(), ship.getMaxSpeed(), ship.getCargoWeight(), ship.getMaxCargoWeight()).toString();
         File file = new File(String.valueOf(Paths.get(path)));
 
         if (!file.exists()) {

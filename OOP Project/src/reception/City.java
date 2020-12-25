@@ -33,16 +33,16 @@ public enum City {
         this.receptions = receptions;
     }
 
-    public static ArrayList<City> printPlaces(City... exclusions) {
+    public static ArrayList<City> printPlaces(City from, List<City> exclusionsList) {
         StringBuilder sb = new StringBuilder();
-        List<City> exclusionsList = new ArrayList<>(Arrays.asList(exclusions));
         Set<City> citiesToReturn = new LinkedHashSet<>(City.values().length - exclusionsList.size());
         int i = 1;
 
+        Map map = Map.getInstance();
         City[] places = City.values();
         for (City place : places) {
             if (!exclusionsList.contains(place)) {
-                sb.append(i++).append(".").append(place).append('\n');
+                sb.append(i++).append(".").append(place).append(" - Distance = ").append(map.getEdge(from, place)).append("KM").append('\n');
                 citiesToReturn.add(place);
             }
         }
