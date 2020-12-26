@@ -2,7 +2,7 @@ package services.waterReceptionServices;
 
 import reception.AbstractReception;
 import reception.City;
-import reception.Map;
+import reception.MapSystem;
 import reception.waterReception.CargoDock;
 import reception.waterReception.TouristDock;
 
@@ -34,7 +34,7 @@ public class DockService {
         ArrayList<City> placesWithCargoDocks = new ArrayList<>();
         int i = 1;
 
-        Map map = Map.getInstance();
+        MapSystem map = MapSystem.getInstance();
         List<City> places = new ArrayList<>(map.getAdjacentCities(from));
         for (City place : places) {
             AbstractReception dock = place.getReceptions().get(0);
@@ -73,7 +73,7 @@ public class DockService {
         ArrayList<City> placesWithTouristDocks = new ArrayList<>();
         int i = 1;
 
-        Map map = Map.getInstance();
+        MapSystem map = MapSystem.getInstance();
         List<City> places = new ArrayList<>(map.getAdjacentCities(from));
         for (City place : places) {
             AbstractReception dock = place.getReceptions().get(1);

@@ -1,6 +1,7 @@
 package transport.waterTransport;
 
 import reception.TouristReception;
+import reception.waterReception.Dock;
 import reception.waterReception.TouristDock;
 import transport.TouristTransport;
 
@@ -15,6 +16,13 @@ public class Cruiser extends Ship implements TouristTransport {
 
     public Cruiser(TouristDock currentPos, String name, int maxPassengerCount, double ticketCost) {
         super(currentPos, name);
+        this.maxPassengerCount = maxPassengerCount;
+        this.ticketCost = ticketCost;
+    }
+
+    public Cruiser(Dock currentPos, String name, String captain, double maxSpeed, int passengerCount, int maxPassengerCount, double ticketCost) {
+        super(currentPos, name, captain, maxSpeed);
+        this.passengerCount = passengerCount;
         this.maxPassengerCount = maxPassengerCount;
         this.ticketCost = ticketCost;
     }

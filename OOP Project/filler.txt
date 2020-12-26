@@ -1,0 +1,6 @@
+CargoShip:Rotterdam|TitanicV1|me|35|0|6000
+CargoShip:San_Francisco|TitanicV2|you|40|200|5000
+CargoShip:Shanghai|Ator|Garik|30|0|2000
+CargoShip:Rotterdam|Titanic|me|35|0|6000
+Cruiser:Lisbon|Santa|hey|35|0|6000|2000
+Cruiser:Hong_Kong|Morex|Mao Zedong|48|5500|10000|1700

@@ -2,7 +2,7 @@ package menu;
 
 import auth.DB;
 import reception.City;
-import reception.Map;
+import reception.MapSystem;
 import reception.waterReception.CargoDock;
 import reception.waterReception.TouristDock;
 import services.waterReceptionServices.CargoDockService;
@@ -14,17 +14,15 @@ import services.waterTransportServices.ShipService;
 import transport.waterTransport.CargoShip;
 import transport.waterTransport.Cruiser;
 import transport.waterTransport.Ship;
+import utils.Utils;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Menu {
     private static final DB db;
-    private static final Map map;
+    private static final MapSystem map;
     private static final Calendar time;
     private static final SimpleDateFormat sdf;
 
@@ -33,7 +31,7 @@ public class Menu {
 
     static {
         db = DB.getInstance();
-        map = Map.getInstance();
+        map = MapSystem.getInstance();
         cargoShips = new ArrayList<>();
         cruisers = new ArrayList<>();
         time = Calendar.getInstance();
@@ -56,7 +54,7 @@ public class Menu {
                         boolean isMenuActive = true;
 
                         while (isMenuActive) {
-                            System.out.println("Choose Transport:\n1.Cargo Ship\n2.Cruiser\n3.Go Back");
+                            System.out.println("Choose Transport:\n1.Cargo Ship\n2.Cruiser\n3.Read Ships From File\n4.Go Back");
                             int item = scanner.nextInt();
 
                             switch (item) {
@@ -424,6 +422,29 @@ public class Menu {
 
                                     break;
                                 case 3:
+                                    System.out.println("To Fill The Ships, First Create A File With These Configurations: (Write each ship on 1 line)");
+                                    System.out.println("-------------------- Make Sure To Write Those Cities Which Have The According Docks --------------------");
+                                    System.out.println("CargoShip:City(Str)|Name(Str)|Captain(Str)|MaxSpeed(double)|CargoWeight(double)|MaxCargoWeight(double)");
+                                    System.out.print("Cities With Cargo Docks Are - ");
+                                    for (City city : City.values()) {
+                                        if (city.getReceptions().get(0) != null)
+                                            System.out.print(city + ", ");
+                                    }
+                                    System.out.println();
+                                    System.out.println("Cruiser:City(Str)|Name(Str)|Captain(Str)|MaxSpeed(double)|PassengerCount(int)|MaxPassengerCount(int)|TicketCost(double)");
+                                    System.out.print("Cities With Tourist Docks Are - ");
+                                    for (City city : City.values()) {
+                                        if (city.getReceptions().get(1) != null)
+                                            System.out.print(city + ", ");
+                                    }
+                                    System.out.println();
+                                    scanner.nextLine();
+                                    System.out.print("Enter The Path To The File - ");
+                                    String path = scanner.nextLine();
+                                    List<String> data = Utils.readLines(path);
+                                    fillShips(data);
+                                    break;
+                                case 4:
                                     System.out.println("Going Back.");
                                     isMenuActive = false;
                                     break;
@@ -690,5 +711,27 @@ public class Menu {
             return null;
 
         return ships.get(objNum - 1);
+    }
+
+    private static void fillShips(List<String> data) {
+        for (String line : data) {
+            String[] split = line.split(":");
+            String type = split[0].toLowerCase();
+            String[] info = split[1].split("\\|");
+            Ship ship;
+            switch (type) {
+                case "cargoship":
+                    ship = new CargoShip((CargoDock) City.valueOf(info[0].toUpperCase()).getReceptions().get(0), info[1],
+                            info[2], Double.parseDouble(info[3]), Double.parseDouble(info[4]), Double.parseDouble(info[5]));
+                    cargoShips.add((CargoShip) ship);
+                    break;
+                case "cruiser":
+                    ship = new Cruiser((TouristDock) City.valueOf(info[0].toUpperCase()).getReceptions().get(1), info[1],
+                            info[2], Double.parseDouble(info[3]), Integer.parseInt(info[4]), Integer.parseInt(info[5]),
+                            Double.parseDouble(info[6]));
+                    cruisers.add((Cruiser) ship);
+                    break;
+            }
+        }
     }
 }

@@ -38,7 +38,7 @@ public enum City {
         Set<City> citiesToReturn = new LinkedHashSet<>(City.values().length - exclusionsList.size());
         int i = 1;
 
-        Map map = Map.getInstance();
+        MapSystem map = MapSystem.getInstance();
         City[] places = City.values();
         for (City place : places) {
             if (!exclusionsList.contains(place)) {

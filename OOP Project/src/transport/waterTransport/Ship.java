@@ -2,8 +2,7 @@ package transport.waterTransport;
 
 import reception.AbstractReception;
 import reception.City;
-import reception.Map;
-import reception.Reception;
+import reception.MapSystem;
 import reception.waterReception.Dock;
 import transport.Transport;
 
@@ -22,6 +21,13 @@ public abstract class Ship implements Transport {
         this.name = name;
     }
 
+    public Ship(Dock currentPos, String name, String captain, double maxSpeed) {
+        this.currentPos = currentPos;
+        this.name = name;
+        this.captain = captain;
+        this.maxSpeed = maxSpeed;
+    }
+
     @Override
     public void moveTo(AbstractReception to) {
         System.out.println("Moving The Ship " + getName() + " From " + this.currentPos.getPlacement() + " to " + to.getPlacement());
@@ -37,7 +43,7 @@ public abstract class Ship implements Transport {
         this.currentPos.undockShip(this);
         this.currentPos = (Dock) to;
         if (this.currentPos.dockShip(this)) {
-            Map map = Map.getInstance();
+            MapSystem map = MapSystem.getInstance();
             Date date = time.getTime();
             Date newDate = new Date((long) (date.getTime() + (map.getEdge(from, to.getPlacement()) / getMaxSpeed() * 3600000)));
             time.setTime(newDate);

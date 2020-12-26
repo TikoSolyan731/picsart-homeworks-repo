@@ -2,6 +2,7 @@ package transport.waterTransport;
 
 import reception.CargoReception;
 import reception.waterReception.CargoDock;
+import reception.waterReception.Dock;
 import transport.CargoTransport;
 
 public class CargoShip extends Ship implements CargoTransport {
@@ -14,6 +15,12 @@ public class CargoShip extends Ship implements CargoTransport {
 
     public CargoShip(CargoDock currentPos, String name, double cargoWeight, double maxCargoWeight) {
         super(currentPos, name);
+        this.cargoWeight = cargoWeight;
+        this.maxCargoWeight = maxCargoWeight;
+    }
+
+    public CargoShip(Dock currentPos, String name, String captain, double maxSpeed, double cargoWeight, double maxCargoWeight) {
+        super(currentPos, name, captain, maxSpeed);
         this.cargoWeight = cargoWeight;
         this.maxCargoWeight = maxCargoWeight;
     }

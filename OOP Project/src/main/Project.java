@@ -12,22 +12,27 @@ import transport.waterTransport.Ship;
 import java.io.IOException;
 
 public class Project {
-    static final String PATH = "classes.txt";
-
     public static void main(String[] args) throws IOException {
-        //          Transport (interface)                             Reception (interface)
-        //               /   |     \                                      /      |      \
+        //          Transport (interface)                                  Reception (interface)
+        //              |     |      |                                    /         |            \
+        //             |      |      |                                  /     AbstractReception   \
+        //            /      |       \                                /           |                \
         //CargoTransport    Ship     TouristTransport        CargoReception    Dock     TouristReception
         //      \          /   \      /                            \           /   \        /
         //        CargoShip     Cruiser                              CargoDock       TouristDock
         //  Architecture
 
+        // Description: This project has 2 main interfaces - Transport and Reception. First acts as a transport which can be ships, airplanes, etc. The Second acts as a
+        // reception point for those classes which can be docks, airports, etc. This project has a map system, which is basically a graph of Cities, which is an enum type.
+        // The Cities have 1 reception of each created type and are initialized by me. They cannot be modified or created. The only
+        // classes that the user can create are the classes implemented by the Transport interface. The user can create, upgrade, move
+        // the transports and/or use its according service's methods. The movement is strictly restricted by the map system, by which
+        // a transport can move to another city if and only if the current city is connected to that other city. Although, the map is a graph,
+        // it is undirected, and a very simple one (No complex path-finding algorithms, like Dijkstra's were used). I have only implemented the water transport and
+        // water reception classes, but the rest of the types are easy to write, as the whole architecture is laid out for them.
+
         // Part 1. The main classes and functionality.
 
-//        CargoDock d1 = new CargoDock(City., 5, 4500);
-//        CargoDock d2 = new CargoDock(City., 6, 6000);
-//        TouristDock d3 = new TouristDock(City.RIO_DE_JANEIRO, 5, 420, 1000);
-//        TouristDock d4 = new TouristDock(City.SINGAPORE, 6);
         TouristDock sydTourist = (TouristDock) City.SYDNEY.getReceptions().get(1);
         CargoDock roterCargo = (CargoDock) City.ROTTERDAM.getReceptions().get(0);
 

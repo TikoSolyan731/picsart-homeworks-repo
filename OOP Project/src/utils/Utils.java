@@ -1,8 +1,12 @@
 package utils;
 
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 public class Utils {
     public static boolean checkInput(int input, int maxInput) {
@@ -20,5 +24,9 @@ public class Utils {
             e.printStackTrace();
         }
         return md5;
+    }
+
+    public static ArrayList<String> readLines(String path) throws IOException {
+        return (ArrayList<String>) Files.readAllLines(Paths.get(path));
     }
 }

@@ -3,9 +3,9 @@ package reception;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Map {
+public class MapSystem {
     private final int[][] adjacencyMatrix = new int[City.values().length][City.values().length];
-    private static Map instance;
+    private static MapSystem instance;
 
     {
         setEdges(City.ROTTERDAM, List.of(City.SAN_FRANCISCO, City.STOCKHOLM, City.LISBON,
@@ -21,13 +21,13 @@ public class Map {
         setEdges(City.SINGAPORE, List.of(City.HONG_KONG), List.of(1200));
     }
 
-    public static Map getInstance() {
+    public static MapSystem getInstance() {
         if (instance == null)
-            instance = new Map();
+            instance = new MapSystem();
         return instance;
     }
 
-    private Map() { }
+    private MapSystem() { }
 
     public boolean containsEdge(City v1, City v2) {
         return getEdge(v1, v2) != 0;
